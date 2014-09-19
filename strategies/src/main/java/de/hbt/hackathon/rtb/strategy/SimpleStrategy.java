@@ -10,7 +10,7 @@ public class SimpleStrategy extends AbstractStrategy {
 
 	@Override
 	public List<AbstractCommand> process() {
-		return new ArrayList<>();
+		return new ArrayList<AbstractCommand>();
 	}
 
 }

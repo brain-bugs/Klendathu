@@ -23,7 +23,7 @@ public class Communicator implements Runnable {
 
 	private final Reader reader = new Reader();
 	private final Writer writer = new Writer();
-	private final List<CommunicationListener> listeners = new ArrayList<>();
+	private final List<CommunicationListener> listeners = new ArrayList<CommunicationListener>();
 
 	private volatile boolean gameOver = false;
 

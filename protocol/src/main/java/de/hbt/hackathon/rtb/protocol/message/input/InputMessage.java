@@ -7,42 +7,56 @@ public abstract class InputMessage {
 
 		try {
 			String messageType = args[0];
-			switch (messageType) {
-			case "Collision":
+			if ("Collision".equalsIgnoreCase(messageType)) {
 				return CollisionMessage.valueOf(args);
-			case "Coordinates":
-				return CoordinatesMessage.valueOf(args);
-			case "Dead":
-				return DeadMessage.valueOf(args);
-			case "Energy":
-				return EnergyMessage.valueOf(args);
-			case "ExitRobot":
-				return ExitRobotMessage.valueOf(args);
-			case "GameFinishes":
-				return GameFinishesMessage.valueOf(args);
-			case "Info":
-				return InfoMessage.valueOf(args);
-			case "Initialize":
-				return InitializeMessage.valueOf(args);
-			case "Radar":
-				return RadarMessage.valueOf(args);
-			case "RobotInfo":
-				return RobotInfoMessage.valueOf(args);
-			case "RobotsLeft":
-				return RobotsLeftMessage.valueOf(args);
-			case "RotationReached":
-				return RotationReachedMessage.valueOf(args);
-			case "WarningMessage":
-				return WarningMessage.valueOf(args);
-			case "YourColour":
-				return YourColourMessage.valueOf(args);
-			case "YourName":
-				return YourNameMessage.valueOf(args);
-			default:
-				return UnknownMessage.valueOf(value);
 			}
+			if ("Coordinates".equalsIgnoreCase(messageType)) {
+				return CoordinatesMessage.valueOf(args);
+			}
+			if ("Dead".equalsIgnoreCase(messageType)) {
+				return DeadMessage.valueOf(args);
+			}
+			if ("Energy".equalsIgnoreCase(messageType)) {
+				return EnergyMessage.valueOf(args);
+			}
+			if ("ExitRobot".equalsIgnoreCase(messageType)) {
+				return ExitRobotMessage.valueOf(args);
+			}
+			if ("GameFinishes".equalsIgnoreCase(messageType)) {
+				return GameFinishesMessage.valueOf(args);
+			}
+			if ("Info".equalsIgnoreCase(messageType)) {
+				return InfoMessage.valueOf(args);
+			}
+			if ("Initialize".equalsIgnoreCase(messageType)) {
+				return InitializeMessage.valueOf(args);
+			}
+			if ("Radar".equalsIgnoreCase(messageType)) {
+				return RadarMessage.valueOf(args);
+			}
+			if ("RobotInfo".equalsIgnoreCase(messageType)) {
+				return RobotInfoMessage.valueOf(args);
+			}
+			if ("RobotsLeft".equalsIgnoreCase(messageType)) {
+				return RobotsLeftMessage.valueOf(args);
+			}
+			if ("RotationReached".equalsIgnoreCase(messageType)) {
+				return RotationReachedMessage.valueOf(args);
+			}
+			if ("WarningMessage".equalsIgnoreCase(messageType)) {
+				return WarningMessage.valueOf(args);
+			}
+			if ("YourColour".equalsIgnoreCase(messageType)) {
+				return YourColourMessage.valueOf(args);
+			}
+			if ("YourName".equalsIgnoreCase(messageType)) {
+				return YourNameMessage.valueOf(args);
+			}
+			return UnknownMessage.valueOf(value);
 
-		} catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
+		} catch (IllegalArgumentException e) {
+			return UnknownMessage.valueOf(value);
+		} catch (ArrayIndexOutOfBoundsException e) {
 			return UnknownMessage.valueOf(value);
 		}
 	}

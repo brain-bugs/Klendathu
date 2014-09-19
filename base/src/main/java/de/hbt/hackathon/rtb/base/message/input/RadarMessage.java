@@ -28,8 +28,8 @@ public class RadarMessage extends InputMessage {
 
 	public static RadarMessage valueOf(String[] args) {
 		double radarDistance = Double.valueOf(args[1]);
-		double radarAngle = Double.valueOf(args[2]);
-		ObjectType objectType = ObjectType.fromCode(Integer.valueOf(args[3]));
+		ObjectType objectType = ObjectType.fromCode(Integer.valueOf(args[2]));
+		double radarAngle = Double.valueOf(args[3]);
 		return new RadarMessage(radarDistance, radarAngle, objectType);
 	}
 

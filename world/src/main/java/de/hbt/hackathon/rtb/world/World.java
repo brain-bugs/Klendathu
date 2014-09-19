@@ -1,13 +1,12 @@
 package de.hbt.hackathon.rtb.world;
 
-import de.hbt.hackathon.rtb.base.geo.GeoObject;
 import de.hbt.hackathon.rtb.base.geo.GeometricSet;
 import de.hbt.hackathon.rtb.base.geo.JTSQuadTreeAdapter;
 
 public class World {
 
 	private Arena arena;
-	private GeometricSet<Cookie> cookie;
+	private GeometricSet<Cookie> cookies;
 	private GeometricSet<Mine> mines;
 	private GeometricSet<Robot> robots;
 	private MyRobot myRobot;
@@ -15,7 +14,7 @@ public class World {
 	private GeometricSet<Wall> walls;
 
 	public World() {
-		cookie = new JTSQuadTreeAdapter<Cookie>();
+		cookies = new JTSQuadTreeAdapter<Cookie>();
 		mines = new JTSQuadTreeAdapter<Mine>();
 		robots = new JTSQuadTreeAdapter<Robot>();
 		shots = new JTSQuadTreeAdapter<Shot>();
@@ -30,6 +29,14 @@ public class World {
 		return this.arena;
 	}
 
+	public void clear() {
+		robots.clear();
+		shots.clear();
+		walls.clear();
+		cookies.clear();
+		mines.clear();
+	}
+
 	public void setMyRobot(MyRobot myRobot) {
 		this.myRobot = myRobot;
 	}
@@ -39,11 +46,23 @@ public class World {
 	}
 
 	public void addCookie(Cookie cookie) {
-
+		cookies.add(cookie);
 	}
 
-	private void addIfNew(GeoObject gameObject, GeometricSet<GeoObject> container) {
+	public void addMine(Mine mine) {
+		mines.add(mine);
+	}
 
+	public void addWall(Wall wall) {
+		walls.add(wall);
+	}
+
+	public void addRobot(Robot robot) {
+		robots.add(robot);
+	}
+
+	public void addShot(Shot shot) {
+		shots.add(shot);
 	}
 
 }

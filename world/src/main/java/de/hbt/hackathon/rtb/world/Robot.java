@@ -2,7 +2,7 @@ package de.hbt.hackathon.rtb.world;
 
 import de.hbt.hackathon.rtb.base.type.Coordinate;
 
-public class Robot extends MovingGameObject {
+public class Robot extends FixedGameObject {
 
 	private final boolean teamMate;
 

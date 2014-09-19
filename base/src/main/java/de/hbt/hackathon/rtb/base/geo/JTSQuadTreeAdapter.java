@@ -110,13 +110,14 @@ public class JTSQuadTreeAdapter<E extends GeoObject> implements GeometricSet<E> 
 
 	@Override
 	public boolean remove(Object obj) {
-		if (contains(obj)) {
-			jtsQuadTree.remove(((GeoObject) obj).getGeometry().getEnvelopeInternal(), obj);
+		// if (contains(obj)) {
+		boolean removed = jtsQuadTree.remove(((GeoObject) obj).getGeometry().getEnvelopeInternal(), obj);
+		if (removed)
 			boundingBox = null; // clear the bounding box, will be recalculated
 								// on demand
-			return true;
-		}
-		return false;
+		return removed;
+		// }
+		// return false;
 	}
 
 	@Override

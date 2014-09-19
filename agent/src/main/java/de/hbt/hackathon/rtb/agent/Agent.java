@@ -48,9 +48,9 @@ public class Agent implements CommunicationListener {
 	public static void main(String[] args) throws IOException {
 		Communicator communicator = new Communicator();
 
-		World world = new World();
+		World world = new World(2);
 		AbstractStrategy strategy;
-		;
+		
 		AbstractStrategy simpleStrategy = new SimpleStrategy(world);
 		AbstractStrategy healingStrategy = new HealingStrategy(world);
 

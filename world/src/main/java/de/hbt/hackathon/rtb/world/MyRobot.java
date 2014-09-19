@@ -2,7 +2,6 @@ package de.hbt.hackathon.rtb.world;
 
 import de.hbt.hackathon.rtb.base.type.Coordinate;
 
-
 public class MyRobot extends Robot {
 
 	private double acceleration;
@@ -98,6 +97,11 @@ public class MyRobot extends Robot {
 
 	public void setRadarSweepLeftAngle(double radarSweepLeftAngle) {
 		this.radarSweepLeftAngle = radarSweepLeftAngle;
+	}
+
+	@Override
+	public void setCurrentPosition(Coordinate coordinate) {
+		super.setCurrentPosition(coordinate);
 	}
 
 }

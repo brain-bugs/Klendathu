@@ -48,7 +48,9 @@ public class HealingStrategy extends AbstractStrategy {
 				Targeter targeter = new Targeter();
 				targeter.driveTo(myRobot, cookie.getCurrentPosition());
 			}
-		} else if (!mines.isEmpty()) {
+		} 
+		
+		if (!mines.isEmpty()) {
 			LOGGER.info("There are mines!");
 			if (myRobot != null) {
 				Mine mine = mines.iterator().next();

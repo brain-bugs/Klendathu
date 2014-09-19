@@ -8,17 +8,17 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.hbt.hackathon.rtb.base.command.AbstractCommand;
+import de.hbt.hackathon.rtb.base.message.input.DeadMessage;
+import de.hbt.hackathon.rtb.base.message.input.EnergyMessage;
+import de.hbt.hackathon.rtb.base.message.input.ExitRobotMessage;
+import de.hbt.hackathon.rtb.base.message.input.GameFinishesMessage;
+import de.hbt.hackathon.rtb.base.message.input.GameStartsMessage;
+import de.hbt.hackathon.rtb.base.message.input.InitializeMessage;
+import de.hbt.hackathon.rtb.base.message.input.InputMessage;
+import de.hbt.hackathon.rtb.base.message.output.ColourMessage;
+import de.hbt.hackathon.rtb.base.message.output.NameMessage;
+import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
-import de.hbt.hackathon.rtb.protocol.message.input.DeadMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.EnergyMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.ExitRobotMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.GameFinishesMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.GameStartsMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.InitializeMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.InputMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.ColourMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.NameMessage;
 import de.hbt.hackathon.rtb.strategy.SimpleStrategy;
 
 public class Agent implements CommunicationListener {
@@ -54,7 +54,8 @@ public class Agent implements CommunicationListener {
 	}
 
 	public void onTimer() {
-		List<AbstractCommand> commands = strategy.process();
+		List<OutputMessage> commands = strategy.process();
+		
 	}
 
 	private void startGameTimer() {

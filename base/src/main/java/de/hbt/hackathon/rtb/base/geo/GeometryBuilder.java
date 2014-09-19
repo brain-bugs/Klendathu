@@ -5,7 +5,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
-import de.hbt.hackathon.rtb.base.Coordinate;
+import de.hbt.hackathon.rtb.base.type.Coordinate;
 
 public class GeometryBuilder implements Function<Coordinate, Geometry> {
 

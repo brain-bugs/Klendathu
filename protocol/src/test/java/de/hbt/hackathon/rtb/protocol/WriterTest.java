@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.hbt.hackathon.rtb.protocol.message.output.NameMessage;
+import de.hbt.hackathon.rtb.base.message.output.NameMessage;
 
 public class WriterTest {
 

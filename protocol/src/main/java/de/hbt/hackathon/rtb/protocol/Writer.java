@@ -5,20 +5,20 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
-import de.hbt.hackathon.rtb.protocol.message.AngleType;
-import de.hbt.hackathon.rtb.protocol.message.output.AccelerateMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.BrakeMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.ColourMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.DebugMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.NameMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.OutputMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.PrintMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.RobotOptionMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.RotateAmountMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.RotateMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.RotateToMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.ShootMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.SweepMessage;
+import de.hbt.hackathon.rtb.base.message.AngleType;
+import de.hbt.hackathon.rtb.base.message.output.AccelerateMessage;
+import de.hbt.hackathon.rtb.base.message.output.BrakeMessage;
+import de.hbt.hackathon.rtb.base.message.output.ColourMessage;
+import de.hbt.hackathon.rtb.base.message.output.DebugMessage;
+import de.hbt.hackathon.rtb.base.message.output.NameMessage;
+import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
+import de.hbt.hackathon.rtb.base.message.output.PrintMessage;
+import de.hbt.hackathon.rtb.base.message.output.RobotOptionMessage;
+import de.hbt.hackathon.rtb.base.message.output.RotateAmountMessage;
+import de.hbt.hackathon.rtb.base.message.output.RotateMessage;
+import de.hbt.hackathon.rtb.base.message.output.RotateToMessage;
+import de.hbt.hackathon.rtb.base.message.output.ShootMessage;
+import de.hbt.hackathon.rtb.base.message.output.SweepMessage;
 
 public class Writer {
 

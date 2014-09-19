@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
-import de.hbt.hackathon.rtb.protocol.message.input.InputMessage;
+import de.hbt.hackathon.rtb.base.message.input.InputMessage;
 
 public class Reader {
 

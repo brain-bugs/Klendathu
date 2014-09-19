@@ -9,10 +9,10 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.hbt.hackathon.rtb.protocol.message.AngleType;
-import de.hbt.hackathon.rtb.protocol.message.input.InputMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.RotationReachedMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.YourNameMessage;
+import de.hbt.hackathon.rtb.base.message.AngleType;
+import de.hbt.hackathon.rtb.base.message.input.InputMessage;
+import de.hbt.hackathon.rtb.base.message.input.RotationReachedMessage;
+import de.hbt.hackathon.rtb.base.message.input.YourNameMessage;
 
 public class ReaderTest {
 

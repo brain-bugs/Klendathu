@@ -1,8 +1,8 @@
 package de.hbt.hackathon.rtb.world;
 
-import de.hbt.hackathon.rtb.base.Coordinate;
 import de.hbt.hackathon.rtb.base.geo.DefaultGeoObject;
 import de.hbt.hackathon.rtb.base.geo.GeometryBuilder;
+import de.hbt.hackathon.rtb.base.type.Coordinate;
 
 public abstract class FixedGameObject extends DefaultGeoObject implements GameObject {
 

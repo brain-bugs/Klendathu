@@ -1,4 +1,4 @@
-package de.hbt.hackathon.rtb.base;
+package de.hbt.hackathon.rtb.base.type;
 
 public class Coordinate {
 

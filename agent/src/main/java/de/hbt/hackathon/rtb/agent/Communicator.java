@@ -6,11 +6,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.hbt.hackathon.rtb.base.message.input.InputMessage;
+import de.hbt.hackathon.rtb.base.message.input.UnknownMessage;
+import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
 import de.hbt.hackathon.rtb.protocol.Reader;
 import de.hbt.hackathon.rtb.protocol.Writer;
-import de.hbt.hackathon.rtb.protocol.message.input.InputMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.UnknownMessage;
-import de.hbt.hackathon.rtb.protocol.message.output.OutputMessage;
 
 public class Communicator implements Runnable {
 

@@ -1,6 +1,6 @@
 package de.hbt.hackathon.rtb.agent;
 
-import de.hbt.hackathon.rtb.protocol.message.input.InputMessage;
+import de.hbt.hackathon.rtb.base.message.input.InputMessage;
 
 public interface CommunicationListener {
 

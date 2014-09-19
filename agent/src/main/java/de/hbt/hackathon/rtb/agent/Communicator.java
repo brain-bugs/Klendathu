@@ -61,7 +61,7 @@ public class Communicator implements Runnable {
 						listener.onExitProgram();
 					}
 				} else if (message instanceof UnknownMessage) {
-					System.err.println("Unknown message received: " + ((UnknownMessage) message).getInputValue());
+					LOGGER.warn("Unknown message received: " + ((UnknownMessage) message).getInputValue());
 				} else {
 					throw new RuntimeException("Unexpected message received: " + message);
 				}

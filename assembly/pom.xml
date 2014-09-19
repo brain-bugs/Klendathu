@@ -27,7 +27,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>de.hbt.hackathon.rtb.testbot.TestBot</mainClass>
+							<mainClass>de.hbt.hackathon.rtb.agent.Agent</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

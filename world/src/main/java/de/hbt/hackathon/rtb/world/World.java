@@ -16,12 +16,12 @@ public class World {
 	private static final Logger LOG = LoggerFactory.getLogger(World.class);
 
 	private Arena arena;
-	private final GeometricSet<Cookie> cookies;
-	private final GeometricSet<Mine> mines;
-	private final GeometricSet<Robot> robots;
+	private final JTSQuadTreeAdapter<Cookie> cookies;
+	private final JTSQuadTreeAdapter<Mine> mines;
+	private final JTSQuadTreeAdapter<Robot> robots;
 	private MyRobot myRobot;
-	private final GeometricSet<Shot> shots;
-	private final GeometricSet<Wall> walls;
+	private final JTSQuadTreeAdapter<Shot> shots;
+	private final JTSQuadTreeAdapter<Wall> walls;
 
 	private final int maxTimeDynamicData;
 
@@ -95,23 +95,23 @@ public class World {
 		shots.add(shot);
 	}
 
-	public GeometricSet<Cookie> getCookies() {
+	public JTSQuadTreeAdapter<Cookie> getCookies() {
 		return cookies;
 	}
 
-	public GeometricSet<Mine> getMines() {
+	public JTSQuadTreeAdapter<Mine> getMines() {
 		return mines;
 	}
 
-	public GeometricSet<Robot> getRobots() {
+	public JTSQuadTreeAdapter<Robot> getRobots() {
 		return robots;
 	}
 
-	public GeometricSet<Shot> getShots() {
+	public JTSQuadTreeAdapter<Shot> getShots() {
 		return shots;
 	}
 
-	public GeometricSet<Wall> getWalls() {
+	public JTSQuadTreeAdapter<Wall> getWalls() {
 		return walls;
 	}
 

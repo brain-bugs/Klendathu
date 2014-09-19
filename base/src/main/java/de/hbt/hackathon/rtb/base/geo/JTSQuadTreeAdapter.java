@@ -68,6 +68,20 @@ public class JTSQuadTreeAdapter<E extends GeoObject> implements GeometricSet<E> 
 		return false;
 	}
 
+	public boolean intersectsGeometry(Geometry geometry) {
+		final List<?> objects = jtsQuadTree.query(geometry.getEnvelopeInternal());
+		if (objects != null) {
+			for (Object obj : objects) {
+				assert obj instanceof GeoObject;
+				GeoObject geoObject = (GeoObject) obj;
+				if (geoObject.getGeometry().intersects(geometry)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Iterator<E> iterator() {

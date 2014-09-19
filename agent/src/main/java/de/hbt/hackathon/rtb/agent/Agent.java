@@ -39,7 +39,6 @@ public class Agent implements CommunicationListener {
 		Thread communicatorThread = new Thread(communicator);
 		communicator.addListener(agent);
 		communicatorThread.start();
-
 	}
 
 	public void onTimer() {
@@ -82,6 +81,11 @@ public class Agent implements CommunicationListener {
 	@Override
 	public void onRobotDied() {
 		stopGameTimer();
+	}
+
+	@Override
+	public void onExitProgram() {
+		communicator.setGameOver(true);
 	}
 
 }

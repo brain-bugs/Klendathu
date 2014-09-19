@@ -10,4 +10,6 @@ public interface CommunicationListener {
 
 	void onRobotDied();
 
+	void onExitProgram();
+
 }

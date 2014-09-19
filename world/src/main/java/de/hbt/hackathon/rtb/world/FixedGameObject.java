@@ -2,15 +2,15 @@ package de.hbt.hackathon.rtb.world;
 
 import de.hbt.hackathon.rtb.base.Coordinate;
 
-public abstract class AbstractGameObject implements GameObject {
+public abstract class FixedGameObject implements GameObject {
 
 	private final Coordinate currentPosition;
 	
-	public AbstractGameObject(Coordinate coordinate) {
+	public FixedGameObject(Coordinate coordinate) {
 		this.currentPosition = coordinate;
 	}
 
-	public Coordinate getCoordinate() {
+	public Coordinate getCurrentPosition() {
 		return this.currentPosition;
 	}
 

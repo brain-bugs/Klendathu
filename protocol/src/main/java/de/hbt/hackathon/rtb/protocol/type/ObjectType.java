@@ -13,5 +13,14 @@ public enum ObjectType {
 	public int getCode() {
 		return code;
 	}
+	
+	public static ObjectType valueOf(int code) {
+		for (ObjectType objectType: ObjectType.values()) {
+			if (objectType.getCode() == code) {
+				return objectType;
+			}
+		}
+		throw new IllegalArgumentException("Unknown code for ObjectType: " + code);
+	}
 
 }

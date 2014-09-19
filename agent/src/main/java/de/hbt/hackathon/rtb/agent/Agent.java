@@ -45,7 +45,16 @@ public class Agent implements CommunicationListener {
 
 	public static void main(String[] args) throws IOException {
 		Communicator communicator = new Communicator();
-		AbstractStrategy strategy = new SimpleStrategy();
+		AbstractStrategy strategy;
+		AbstractStrategy simpleStrategy = new SimpleStrategy();
+		
+		if (args[0].equals(simpleStrategy.getName())) {
+			strategy = simpleStrategy;
+		} else {
+			LOGGER.error("No bot name is given!");
+			strategy = simpleStrategy;
+		}
+		
 		Agent agent = new Agent(communicator, strategy);
 
 		Thread communicatorThread = new Thread(communicator);

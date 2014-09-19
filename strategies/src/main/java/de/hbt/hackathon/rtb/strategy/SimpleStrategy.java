@@ -11,6 +11,8 @@ import de.hbt.hackathon.rtb.base.message.output.RotateAmountMessage;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
 
 public class SimpleStrategy extends AbstractStrategy {
+	
+	private String NAME = "Simple";
 
 	@Override
 	public List<OutputMessage> process() {
@@ -20,6 +22,11 @@ public class SimpleStrategy extends AbstractStrategy {
 		AccelerateMessage am = new AccelerateMessage(1.0);
 		messages.add(am);
 		return messages;
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
 	}
 
 }

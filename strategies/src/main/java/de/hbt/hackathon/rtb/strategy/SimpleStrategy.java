@@ -10,7 +10,9 @@ public class SimpleStrategy extends AbstractStrategy {
 
 	@Override
 	public List<OutputMessage> process() {
-		return new ArrayList<OutputMessage>();
+		List<OutputMessage> messages =  new ArrayList<OutputMessage>();
+		
+		return messages;
 	}
 
 }

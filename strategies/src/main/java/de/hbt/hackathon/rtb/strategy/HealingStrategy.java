@@ -2,6 +2,7 @@ package de.hbt.hackathon.rtb.strategy;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -14,8 +15,10 @@ import de.hbt.hackathon.rtb.base.message.output.AccelerateMessage;
 import de.hbt.hackathon.rtb.base.message.output.BrakeMessage;
 import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
 import de.hbt.hackathon.rtb.base.message.output.RotateAmountMessage;
+import de.hbt.hackathon.rtb.base.message.output.RotateMessage;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
 import de.hbt.hackathon.rtb.world.Cookie;
+import de.hbt.hackathon.rtb.world.GameObject;
 import de.hbt.hackathon.rtb.world.Mine;
 import de.hbt.hackathon.rtb.world.MyRobot;
 import de.hbt.hackathon.rtb.world.Robot;
@@ -36,6 +39,7 @@ public class HealingStrategy extends AbstractStrategy {
 	@Override
 	public List<OutputMessage> process() {
 		List<OutputMessage> messages = new ArrayList<OutputMessage>();
+		messages.add(new RotateMessage(EnumSet.of(AngleType.RADAR), getCapabilities().getMaxRadarRotate()));
 
 		MyRobot myRobot = world.getMyRobot();
 		Set<Cookie> cookies = world.getCookies();
@@ -46,10 +50,9 @@ public class HealingStrategy extends AbstractStrategy {
 			if (myRobot != null) {
 				Cookie cookie = cookies.iterator().next();
 				Targeter targeter = new Targeter();
-				targeter.driveTo(myRobot, cookie.getCurrentPosition());
+				messages.addAll(targeter.driveTo(myRobot, cookie.getCurrentPosition()));
 			}
 		}
-
 		if (!mines.isEmpty()) {
 			LOGGER.info("There are mines!");
 			if (myRobot != null) {
@@ -61,7 +64,7 @@ public class HealingStrategy extends AbstractStrategy {
 		} else if (!robots.isEmpty()) {
 			LOGGER.info("There are robots!");
 			if (myRobot != null) {
-				Robot robot = robots.iterator().next();
+				Robot robot = getNewestGameObject(robots.iterator());
 				Targeter targeter = new Targeter();
 				messages.addAll(targeter.aimCannonToAndShoot(myRobot, robot.getCurrentPosition(), getCapabilities().getMaxCannonRotate(),
 						getCapabilities().getMaxShotEnergy() / 3d));
@@ -75,6 +78,19 @@ public class HealingStrategy extends AbstractStrategy {
 			messages.add(bm);
 		}
 		return messages;
+	}
+
+	private static <E extends GameObject> E getNewestGameObject(Iterator<E> iterator) {
+		double newestTimeStamp = 0;
+		E newestGameObject = null;
+		while (iterator.hasNext()) {
+			E gameObject = iterator.next();
+			if (gameObject.getCurrentPosition().getTimeStamp() > newestTimeStamp) {
+				newestGameObject = gameObject;
+				newestTimeStamp = gameObject.getCurrentPosition().getTimeStamp();
+			}
+		}
+		return newestGameObject;
 	}
 
 	@Override

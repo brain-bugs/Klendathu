@@ -66,7 +66,7 @@ public class Targeter {
 		List<OutputMessage> messages = new ArrayList<OutputMessage>();
 		this.setOwnLocation(myRobot.getCurrentPosition(), AngleUtils.normalizeAngle(myRobot.getCannonAngle()));
 		double rotationAngle = AngleUtils.normalizeAngle(this.calculateAngleTowards(targetCoordinate));
-		double angleOffset = (Math.toDegrees(rotationAngle) < 180d) ? 1d : -1d;
+		double angleOffset = (Math.toDegrees(rotationAngle) < 180d) ? 2d : -2d;
 
 		LOGGER.info("angle to target: " + Math.toDegrees(rotationAngle));
 		LOGGER.debug("My position: " + myRobot.getCurrentPosition() + ", cannon angle: "
@@ -80,7 +80,7 @@ public class Targeter {
 		}
 
 		RotateAmountMessage rm = new RotateAmountMessage(EnumSet.of(AngleType.CANNON), cannonRotateSpeed, angleOffset);
-		LOGGER.info("Rotate cannon by " + angleOffset + " radians");
+		LOGGER.info("Rotate cannon by " + angleOffset + " radians with speed " + cannonRotateSpeed);
 		messages.add(rm);
 
 		return messages;

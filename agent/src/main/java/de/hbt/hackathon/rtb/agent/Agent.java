@@ -28,7 +28,7 @@ public class Agent implements CommunicationListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Agent.class);
 
 	// technical configuration
-	private static final int UPDATES_PER_SECOND = 10;
+	private static final int UPDATES_PER_SECOND = 20;
 
 	// game configuration
 	private static final String NAME = "Brainbug";
@@ -50,7 +50,7 @@ public class Agent implements CommunicationListener {
 
 		World world = new World(2);
 		AbstractStrategy strategy;
-		
+
 		AbstractStrategy simpleStrategy = new SimpleStrategy(world);
 		AbstractStrategy healingStrategy = new HealingStrategy(world);
 
@@ -62,6 +62,7 @@ public class Agent implements CommunicationListener {
 			LOGGER.error("No bot name is given!");
 			strategy = simpleStrategy;
 		}
+		LOGGER.info("Strategy implementation: " + strategy.getClass().getSimpleName());
 
 		WorldUpdater worldUpdater = new WorldUpdater(world);
 		CapabilitiesBuilder capabilitiesBuilder = new CapabilitiesBuilder();

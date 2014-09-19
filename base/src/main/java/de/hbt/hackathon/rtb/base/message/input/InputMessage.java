@@ -1,5 +1,8 @@
 package de.hbt.hackathon.rtb.base.message.input;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 public abstract class InputMessage {
 
 	public static InputMessage valueOf(String value) {
@@ -67,6 +70,11 @@ public abstract class InputMessage {
 			e.printStackTrace();
 			return UnknownMessage.valueOf(value);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 
 }

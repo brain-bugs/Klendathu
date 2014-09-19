@@ -4,4 +4,11 @@
   <artifactId>world</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>The world</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>de.hbt.hackathon.rtb</groupId>
+  		<artifactId>base</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

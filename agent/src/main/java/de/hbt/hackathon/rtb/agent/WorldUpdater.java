@@ -19,6 +19,7 @@ import de.hbt.hackathon.rtb.base.message.input.RobotInfoMessage;
 import de.hbt.hackathon.rtb.base.type.Coordinate;
 import de.hbt.hackathon.rtb.base.type.ObjectType;
 import de.hbt.hackathon.rtb.world.Cookie;
+import de.hbt.hackathon.rtb.world.GameObject;
 import de.hbt.hackathon.rtb.world.Mine;
 import de.hbt.hackathon.rtb.world.MyRobot;
 import de.hbt.hackathon.rtb.world.Robot;
@@ -71,26 +72,25 @@ public class WorldUpdater implements CommunicationListener {
 		double scaleX = 500 / width;
 		double scaleY = 500 / height;
 
-		g.setColor(Color.GREEN);
+		g.setColor(Color.ORANGE);
 		drawPoint(g, x, y, offsetX, offsetY, scaleX, scaleY);
 
-		GeometricSet<Wall> walls = world.getWalls();
-		for (Wall wall : walls) {
-			g.setColor(Color.BLACK);
-			Coordinate c = wall.getCurrentPosition();
-			drawPoint(g, c.getX(), c.getY(), offsetX, offsetY, scaleX, scaleY);
-		}
+		drawGameObjects(g, offsetX, offsetY, scaleX, scaleY, world.getWalls(), Color.BLACK);
+		drawGameObjects(g, offsetX, offsetY, scaleX, scaleY, world.getRobots(), Color.RED);
+		drawGameObjects(g, offsetX, offsetY, scaleX, scaleY, world.getShots(), Color.YELLOW);
+		drawGameObjects(g, offsetX, offsetY, scaleX, scaleY, world.getMines(), Color.CYAN);
+	}
 
-		GeometricSet<Robot> robots = world.getRobots();
-		for (Robot robot : robots) {
-			Coordinate c = robot.getCurrentPosition();
-			g.setColor(Color.RED);
+	private void drawGameObjects(Graphics g, double offsetX, double offsetY, double scaleX, double scaleY, GeometricSet<? extends GameObject> objects, Color color) {
+		for (GameObject object : objects) {
+			Coordinate c = object.getCurrentPosition();
+			g.setColor(color);
 			drawPoint(g, c.getX(), c.getY(), offsetX, offsetY, scaleX, scaleY);
 		}
 	}
 
 	private void drawPoint(Graphics g, double x, double y, double offsetX, double offsetY, double scaleX, double scaleY) {
-		g.drawOval((int) ((offsetX + x) * scaleX), 500 - (int) ((offsetY + y) * scaleY), 2, 2);
+		g.fillOval((int) ((offsetX + x) * scaleX), 500 - (int) ((offsetY + y) * scaleY), 2, 2);
 	}
 
 	public WorldUpdater(World world) {

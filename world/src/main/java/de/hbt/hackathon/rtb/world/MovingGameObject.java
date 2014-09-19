@@ -18,6 +18,10 @@ public abstract class MovingGameObject extends DefaultGeoObject implements GameO
 		lastKnownPositions.offer(currentPosition);
 	}
 
+	public void setCurrentPosition(Coordinate coordinate) {
+		lastKnownPositions.offer(coordinate);
+	}
+
 	@Override
 	public Coordinate getCurrentPosition() {
 		return lastKnownPositions.peek();

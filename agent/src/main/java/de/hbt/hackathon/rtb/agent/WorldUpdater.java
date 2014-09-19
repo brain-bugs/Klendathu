@@ -1,10 +1,10 @@
 package de.hbt.hackathon.rtb.agent;
 
-import de.hbt.hackathon.rtb.base.Coordinate;
-import de.hbt.hackathon.rtb.protocol.message.input.CoordinatesMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.InputMessage;
-import de.hbt.hackathon.rtb.protocol.message.input.RadarMessage;
-import de.hbt.hackathon.rtb.protocol.type.ObjectType;
+import de.hbt.hackathon.rtb.base.message.input.CoordinatesMessage;
+import de.hbt.hackathon.rtb.base.message.input.InputMessage;
+import de.hbt.hackathon.rtb.base.message.input.RadarMessage;
+import de.hbt.hackathon.rtb.base.type.Coordinate;
+import de.hbt.hackathon.rtb.base.type.ObjectType;
 import de.hbt.hackathon.rtb.world.Cookie;
 import de.hbt.hackathon.rtb.world.Mine;
 import de.hbt.hackathon.rtb.world.MyRobot;
@@ -30,7 +30,7 @@ public class WorldUpdater implements CommunicationListener {
 				myRobot.setCurrentPosition(coordinate);
 			}
 
-			double robotAngle = coordinatesMessage.getRotationAngle();
+			double robotAngle = coordinatesMessage.getRobotAngle();
 			myRobot.setRotationAngle(robotAngle);
 
 			world.setMyRobot(myRobot);

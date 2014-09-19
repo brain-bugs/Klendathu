@@ -19,6 +19,7 @@ import de.hbt.hackathon.rtb.base.message.output.ColourMessage;
 import de.hbt.hackathon.rtb.base.message.output.NameMessage;
 import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
+import de.hbt.hackathon.rtb.strategy.HealingStrategy;
 import de.hbt.hackathon.rtb.strategy.SimpleStrategy;
 import de.hbt.hackathon.rtb.world.World;
 
@@ -51,9 +52,12 @@ public class Agent implements CommunicationListener {
 		AbstractStrategy strategy;
 		;
 		AbstractStrategy simpleStrategy = new SimpleStrategy(world);
+		AbstractStrategy healingStrategy = new HealingStrategy(world);
 
 		if (args[0].equals(simpleStrategy.getName())) {
 			strategy = simpleStrategy;
+		} else if (args[0].equals(healingStrategy.getName())) {
+			strategy = healingStrategy;
 		} else {
 			LOGGER.error("No bot name is given!");
 			strategy = simpleStrategy;

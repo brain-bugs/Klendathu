@@ -7,11 +7,19 @@ import java.util.TimerTask;
 
 import de.hbt.hackathon.rtb.base.command.AbstractCommand;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
+import de.hbt.hackathon.rtb.protocol.message.output.ColourMessage;
+import de.hbt.hackathon.rtb.protocol.message.output.NameMessage;
 import de.hbt.hackathon.rtb.strategy.SimpleStrategy;
 
 public class Agent implements CommunicationListener {
 
+	// technical configuration
 	private static final int UPDATES_PER_SECOND = 10;
+
+	// game configuration
+	private static final String NAME = "Foo";
+	private static final String HOME_COLOUR = "FFFFFF";
+	private static final String AWAY_COLOUR = "FF7777";
 
 	private final Communicator communicator;
 	private final AbstractStrategy strategy;
@@ -34,7 +42,11 @@ public class Agent implements CommunicationListener {
 
 	}
 
-	public void start() {
+	public void onTimer() {
+		List<AbstractCommand> commands = strategy.process();
+	}
+
+	private void startGameTimer() {
 		gameTimer.schedule(new TimerTask() {
 
 			@Override
@@ -43,17 +55,33 @@ public class Agent implements CommunicationListener {
 			}
 
 		}, 0L, 1000L / UPDATES_PER_SECOND);
-
 	}
 
-	public void onTimer() {
-		List<AbstractCommand> commands = strategy.process();
+	private void stopGameTimer() {
+		gameTimer.cancel();
 	}
 
 	@Override
 	public void onGameInitialized(boolean first) {
-		// TODO Auto-generated method stub
+		if (first) {
+			communicator.sendOutputMessage(new NameMessage(NAME));
+			communicator.sendOutputMessage(new ColourMessage(HOME_COLOUR, AWAY_COLOUR));
+		}
+	}
 
+	@Override
+	public void onGameStarted() {
+		startGameTimer();
+	}
+
+	@Override
+	public void onGameFinished() {
+		stopGameTimer();
+	}
+
+	@Override
+	public void onRobotDied() {
+		stopGameTimer();
 	}
 
 }

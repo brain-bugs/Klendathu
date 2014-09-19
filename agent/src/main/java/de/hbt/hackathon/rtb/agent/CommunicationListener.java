@@ -2,6 +2,12 @@ package de.hbt.hackathon.rtb.agent;
 
 public interface CommunicationListener {
 
-	public void onGameInitialized(boolean first);
+	void onGameInitialized(boolean first);
+
+	void onGameStarted();
+
+	void onGameFinished();
+
+	void onRobotDied();
 
 }

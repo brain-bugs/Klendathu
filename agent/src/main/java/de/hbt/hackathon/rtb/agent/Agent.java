@@ -20,6 +20,7 @@ import de.hbt.hackathon.rtb.base.message.output.NameMessage;
 import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
 import de.hbt.hackathon.rtb.strategy.SimpleStrategy;
+import de.hbt.hackathon.rtb.world.World;
 
 public class Agent implements CommunicationListener {
 
@@ -45,8 +46,10 @@ public class Agent implements CommunicationListener {
 
 	public static void main(String[] args) throws IOException {
 		Communicator communicator = new Communicator();
-		AbstractStrategy strategy;
-		AbstractStrategy simpleStrategy = new SimpleStrategy();
+		
+		World world = new World();
+		AbstractStrategy strategy;;
+		AbstractStrategy simpleStrategy = new SimpleStrategy(world);
 		
 		if (args[0].equals(simpleStrategy.getName())) {
 			strategy = simpleStrategy;
@@ -55,10 +58,12 @@ public class Agent implements CommunicationListener {
 			strategy = simpleStrategy;
 		}
 		
-		Agent agent = new Agent(communicator, strategy);
+		WorldUpdater worldUpdater = new WorldUpdater(world);
 
+		Agent agent = new Agent(communicator, strategy);
 		Thread communicatorThread = new Thread(communicator);
 		communicator.addListener(agent);
+		communicator.addListener(worldUpdater);
 		communicatorThread.start();
 	}
 

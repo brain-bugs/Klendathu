@@ -18,4 +18,9 @@ public abstract class FixedGameObject extends DefaultGeoObject implements GameOb
 		return this.currentPosition;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "@" + getCurrentPosition();
+	}
+
 }

@@ -55,7 +55,9 @@ public class Agent implements CommunicationListener {
 
 	public void onTimer() {
 		List<OutputMessage> commands = strategy.process();
-		
+		for (OutputMessage message : commands) {
+			communicator.sendOutputMessage(message);
+		}
 	}
 
 	private void startGameTimer() {

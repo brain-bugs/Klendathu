@@ -4,7 +4,7 @@ public class Coordinate {
 
 	private final double x;
 	private final double y;
-	
+
 	private final long timeStamp;
 
 	public Coordinate(double x, double y, long timeStamp) {
@@ -20,9 +20,14 @@ public class Coordinate {
 	public double getY() {
 		return y;
 	}
-	
+
 	public long getTimeStamp() {
 		return timeStamp;
+	}
+
+	@Override
+	public String toString() {
+		return "Coordinate[x=" + x + ",y=" + y + ",timeStamp=" + timeStamp;
 	}
 
 }

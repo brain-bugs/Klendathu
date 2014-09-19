@@ -8,6 +8,7 @@ import de.hbt.hackathon.rtb.protocol.message.input.InitializeMessage;
 import de.hbt.hackathon.rtb.protocol.message.input.InputMessage;
 import de.hbt.hackathon.rtb.protocol.message.output.ColourMessage;
 import de.hbt.hackathon.rtb.protocol.message.output.NameMessage;
+import de.hbt.hackathon.rtb.simplebot.SimpleBot;
 
 public class Agent {
 	
@@ -15,13 +16,14 @@ public class Agent {
 		Reader reader = new Reader();
 		Writer writer = new Writer();
 		
+		AbstractStrategy bot = new SimpleBot(writer);
+		
 		whileloop: do {
 			
 			try {
 				InputMessage message = reader.read();
 				if(message instanceof InitializeMessage) {
-					writer.write(new NameMessage("SimpleBot"));
-					writer.write(new ColourMessage("cccccc", "000000"));
+					bot.processInitialize();
 				}
 				
 				Thread.sleep(500);

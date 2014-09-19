@@ -18,7 +18,7 @@ public class RobotInfoMessage extends InputMessage {
 		return teamMate;
 	}
 
-	public RobotInfoMessage valueOf(String[] args) {
+	public static RobotInfoMessage valueOf(String[] args) {
 		double energyLevel = Double.parseDouble(args[1]);
 		int teamMateValue = Integer.parseInt(args[2]);
 		return new RobotInfoMessage(energyLevel, teamMateValue == 1);

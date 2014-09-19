@@ -1,6 +1,6 @@
 package de.hbt.hackathon.rtb.protocol.message.input;
 
-public class RobotsLeftMessage {
+public class RobotsLeftMessage extends InputMessage {
 
 	private final int numberOfRobots;
 
@@ -12,7 +12,7 @@ public class RobotsLeftMessage {
 		return numberOfRobots;
 	}
 
-	public RobotsLeftMessage valueOf(String[] args) {
+	public static RobotsLeftMessage valueOf(String[] args) {
 		int numberOfRobots = Integer.parseInt(args[1]);
 		return new RobotsLeftMessage(numberOfRobots);
 	}

@@ -12,7 +12,7 @@ public class EnergyMessage extends InputMessage {
 		return energyLevel;
 	}
 	
-	public EnergyMessage valueOf(String[] args) {
+	public static EnergyMessage valueOf(String[] args) {
 		int energyLevel = Integer.parseInt(args[1]);
 		return new EnergyMessage(energyLevel);
 	}

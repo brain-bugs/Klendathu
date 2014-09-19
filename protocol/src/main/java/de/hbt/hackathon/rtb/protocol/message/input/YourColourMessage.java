@@ -1,6 +1,6 @@
 package de.hbt.hackathon.rtb.protocol.message.input;
 
-public class YourColourMessage {
+public class YourColourMessage extends InputMessage {
 
 	private final String colour;
 
@@ -12,7 +12,7 @@ public class YourColourMessage {
 		return colour;
 	}
 
-	public YourColourMessage valueOf(String[] args) {
+	public static YourColourMessage valueOf(String[] args) {
 		return new YourColourMessage(args[1]);
 	}
 

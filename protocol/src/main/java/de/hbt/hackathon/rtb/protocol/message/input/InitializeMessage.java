@@ -12,7 +12,7 @@ public class InitializeMessage extends InputMessage {
 		return first;
 	}
 	
-	public InitializeMessage valueOf(String[] args) {
+	public static InitializeMessage valueOf(String[] args) {
 		int firstValue = Integer.parseInt(args[1]);
 		return new InitializeMessage(firstValue == 1);
 	}

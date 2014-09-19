@@ -20,7 +20,7 @@ public class CoordinatesMessage extends InputMessage {
 		return robotAngle;
 	}
 
-	public CoordinatesMessage valueOf(String[] args) {
+	public static CoordinatesMessage valueOf(String[] args) {
 		double x = Double.parseDouble(args[1]);
 		double y = Double.parseDouble(args[2]);
 		double robotAngle = Double.parseDouble(args[3]);

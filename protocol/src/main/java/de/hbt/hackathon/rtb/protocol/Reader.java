@@ -20,8 +20,12 @@ public class Reader {
 	}
 
 	// non-blocking
-	public boolean ready() throws IOException {
-		return br.ready();
+	public boolean ready() {
+		try {
+			return br.ready();
+		} catch (IOException e) {
+			throw new RuntimeException("Could not check ready state on input stream! WTF!?!", e);
+		}
 	}
 
 	// blocking

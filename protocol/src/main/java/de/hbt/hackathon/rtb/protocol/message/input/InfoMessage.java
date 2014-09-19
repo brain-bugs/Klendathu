@@ -24,7 +24,7 @@ public class InfoMessage extends InputMessage {
 		return cannonAngle;
 	}
 	
-	public InfoMessage valueOf(String[] args) {
+	public static InfoMessage valueOf(String[] args) {
 		double time = Double.parseDouble(args[1]);
 		double speed = Double.parseDouble(args[2]);
 		double cannonAngle = Double.parseDouble(args[3]);

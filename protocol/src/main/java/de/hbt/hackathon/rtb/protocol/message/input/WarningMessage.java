@@ -1,6 +1,6 @@
 package de.hbt.hackathon.rtb.protocol.message.input;
 
-public class WarningMessage {
+public class WarningMessage extends InputMessage {
 
 	private final WarningType warningType;
 	private final String message;

@@ -41,7 +41,7 @@ public class WriterTest {
 	public void testWrite01() {
 		NameMessage message = new NameMessage("brain_bug_no.1");
 		writer.write(message);
-		Assert.assertEquals("Name brain_bug_no.1" + System.lineSeparator(), out.getBuffer().toString());
+		Assert.assertEquals("Name brain_bug_no.1\n", out.getBuffer().toString());
 	}
 
 }

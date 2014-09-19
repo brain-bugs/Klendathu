@@ -6,10 +6,11 @@
 	<version>0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
+		<module>../base</module>
 		<module>../world</module>
 		<module>../protocol</module>
+		<module>../strategies</module>
 		<module>../agent</module>
-		<module>../base</module>
 		<module>../assembly</module>
 	</modules>
 

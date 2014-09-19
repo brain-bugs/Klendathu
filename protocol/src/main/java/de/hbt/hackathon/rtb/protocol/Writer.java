@@ -23,7 +23,7 @@ import de.hbt.hackathon.rtb.protocol.message.output.SweepMessage;
 public class Writer {
 
 	private final OutputStreamWriter out;
-	private StringBuilder sb = new StringBuilder();
+	private final StringBuilder sb = new StringBuilder();
 
 	public Writer() {
 		try {
@@ -81,7 +81,7 @@ public class Writer {
 			} else {
 				throw new RuntimeException("Unknown OutputMessage type: " + message.getClass());
 			}
-			sb.append(System.lineSeparator());
+			sb.append("\n");
 			out.write(sb.toString());
 			out.flush();
 		} catch (IOException e) {

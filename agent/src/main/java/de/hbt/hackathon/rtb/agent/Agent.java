@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.hbt.hackathon.rtb.base.command.AbstractCommand;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
 import de.hbt.hackathon.rtb.protocol.message.output.ColourMessage;
@@ -13,11 +16,13 @@ import de.hbt.hackathon.rtb.strategy.SimpleStrategy;
 
 public class Agent implements CommunicationListener {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(Agent.class);
+
 	// technical configuration
 	private static final int UPDATES_PER_SECOND = 10;
 
 	// game configuration
-	private static final String NAME = "Foo";
+	private static final String NAME = "Brainbug";
 	private static final String HOME_COLOUR = "FFFFFF";
 	private static final String AWAY_COLOUR = "FF7777";
 
@@ -63,6 +68,7 @@ public class Agent implements CommunicationListener {
 	@Override
 	public void onGameInitialized(boolean first) {
 		if (first) {
+			LOGGER.info("Game initialized for the first time, sending name " + NAME + " and colours.");
 			communicator.sendOutputMessage(new NameMessage(NAME));
 			communicator.sendOutputMessage(new ColourMessage(HOME_COLOUR, AWAY_COLOUR));
 		}
@@ -70,21 +76,25 @@ public class Agent implements CommunicationListener {
 
 	@Override
 	public void onGameStarted() {
+		LOGGER.info("Game started.");
 		startGameTimer();
 	}
 
 	@Override
 	public void onGameFinished() {
+		LOGGER.info("Game finished.");
 		stopGameTimer();
 	}
 
 	@Override
 	public void onRobotDied() {
+		LOGGER.info("Our robot died :-(");
 		stopGameTimer();
 	}
 
 	@Override
 	public void onExitProgram() {
+		LOGGER.info("Program exiting.");
 		communicator.setGameOver(true);
 	}
 

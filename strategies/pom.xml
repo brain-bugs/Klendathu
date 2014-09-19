@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.hbt.hackathon.rtb</groupId>
-	<artifactId>agent</artifactId>
+	<artifactId>strategies</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
@@ -19,17 +19,11 @@
 		</dependency>
 		<dependency>
 			<groupId>de.hbt.hackathon.rtb</groupId>
-			<artifactId>protocol</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>de.hbt.hackathon.rtb</groupId>
-			<artifactId>strategies</artifactId>
+			<artifactId>base</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>brain-bugs-robot</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -37,19 +31,6 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>de.hbt.hackathon.rtb.testbot.TestBot</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
 				</configuration>
 			</plugin>
 		</plugins>

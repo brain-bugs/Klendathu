@@ -81,7 +81,7 @@ public class Writer {
 			} else {
 				throw new RuntimeException("Unknown OutputMessage type: " + message.getClass());
 			}
-			sb.append('\n');
+			sb.append(System.lineSeparator());
 			out.write(sb.toString());
 			out.flush();
 		} catch (IOException e) {

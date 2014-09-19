@@ -49,9 +49,7 @@ public class WorldUpdater implements CommunicationListener {
 			ObjectType objectType = radarMessage.getObjectType();
 			double radarAngle = radarMessage.getRadarAngle();
 			double radarDistance = radarMessage.getRadarDistance();
-			if (myRobot == null) {
 
-			}
 			Coordinate currentPosition = myRobot.getCurrentPosition();
 			double cx = currentPosition.getX();
 			double cy = currentPosition.getY();

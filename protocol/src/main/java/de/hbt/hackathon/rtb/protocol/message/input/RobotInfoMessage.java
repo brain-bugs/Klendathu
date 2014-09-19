@@ -1,6 +1,6 @@
 package de.hbt.hackathon.rtb.protocol.message.input;
 
-public class RobotInfoMessage {
+public class RobotInfoMessage extends InputMessage {
 
 	private final double energyLevel;
 	private final boolean teamMate;

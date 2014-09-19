@@ -13,6 +13,18 @@ public class RadarMessage extends InputMessage {
 		this.radarAngle = radarAngle;
 		this.objectType = objectType;
 	}
+	
+	public double getRadarDistance() {
+		return radarDistance;
+	}
+
+	public double getRadarAngle() {
+		return radarAngle;
+	}
+
+	public ObjectType getObjectType() {
+		return objectType;
+	}
 
 	public static RadarMessage valueOf(String[] args) {
 		double radarDistance = Double.valueOf(args[1]);
@@ -20,5 +32,5 @@ public class RadarMessage extends InputMessage {
 		ObjectType objectType = ObjectType.valueOf(args[3]);
 		return new RadarMessage(radarDistance, radarAngle, objectType);
 	}
-
+	
 }

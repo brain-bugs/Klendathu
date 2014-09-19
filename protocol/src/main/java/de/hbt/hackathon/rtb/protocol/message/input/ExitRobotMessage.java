@@ -1,5 +1,5 @@
 package de.hbt.hackathon.rtb.protocol.message.input;
 
-public class ExitRobotMessage {
+public class ExitRobotMessage extends InputMessage {
 
 }

@@ -1,6 +1,6 @@
 package de.hbt.hackathon.rtb.protocol.message.input;
 
-public class EnergyMessage {
+public class EnergyMessage extends InputMessage {
 	
 	private final int energyLevel;
 

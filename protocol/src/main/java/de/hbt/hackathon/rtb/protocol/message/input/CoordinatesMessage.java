@@ -2,7 +2,7 @@ package de.hbt.hackathon.rtb.protocol.message.input;
 
 import de.hbt.hackathon.rtb.base.Coordinate;
 
-public class CoordinatesMessage {
+public class CoordinatesMessage extends InputMessage {
 
 	private final Coordinate coordinate;
 	private final double robotAngle;

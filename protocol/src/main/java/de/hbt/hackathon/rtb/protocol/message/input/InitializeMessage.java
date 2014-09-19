@@ -1,6 +1,6 @@
 package de.hbt.hackathon.rtb.protocol.message.input;
 
-public class InitializeMessage {
+public class InitializeMessage extends InputMessage {
 	
 	private final boolean first;
 	

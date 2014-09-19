@@ -1,6 +1,6 @@
 package de.hbt.hackathon.rtb.protocol.message.input;
 
-public class InfoMessage {
+public class InfoMessage extends InputMessage {
 	
 	private final double time;
 	private final double speed;

@@ -1,5 +1,5 @@
 package de.hbt.hackathon.rtb.protocol.message.input;
 
-public class DeadMessage {
+public class DeadMessage extends InputMessage {
 
 }

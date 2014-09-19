@@ -1,22 +1,24 @@
 package de.hbt.hackathon.rtb.world;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import de.hbt.hackathon.rtb.base.Coordinate;
+import de.hbt.hackathon.rtb.base.geo.DefaultGeoObject;
+import de.hbt.hackathon.rtb.base.geo.GeometryBuilder;
 
-public abstract class MovingGameObject implements GameObject {
+public abstract class MovingGameObject extends DefaultGeoObject implements GameObject {
 
 	private final CircularFifoQueue<Coordinate> lastKnownPositions = new CircularFifoQueue<Coordinate>();
 
 	public MovingGameObject(Coordinate currentPosition) {
+		super(GeometryBuilder.INSTANCE.apply(currentPosition));
 		lastKnownPositions.offer(currentPosition);
 	}
 
+	@Override
 	public Coordinate getCurrentPosition() {
 		return lastKnownPositions.peek();
 	}

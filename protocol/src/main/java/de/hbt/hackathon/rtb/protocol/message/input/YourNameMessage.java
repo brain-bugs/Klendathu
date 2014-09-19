@@ -4,4 +4,16 @@ public class YourNameMessage {
 	
 	private final String name;
 
+	private YourNameMessage(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public YourNameMessage valueOf(String[] args) {
+		return new YourNameMessage(args[1]);
+	}
+	
 }

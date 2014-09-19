@@ -22,8 +22,14 @@ public abstract class InputMessage {
 			if ("ExitRobot".equalsIgnoreCase(messageType)) {
 				return ExitRobotMessage.valueOf(args);
 			}
+			if ("GameStarts".equalsIgnoreCase(messageType)) {
+				return GameStartsMessage.valueOf(args);
+			}
 			if ("GameFinishes".equalsIgnoreCase(messageType)) {
 				return GameFinishesMessage.valueOf(args);
+			}
+			if ("GameOption".equalsIgnoreCase(messageType)) {
+				return GameOptionMessage.valueOf(args);
 			}
 			if ("Info".equalsIgnoreCase(messageType)) {
 				return InfoMessage.valueOf(args);
@@ -52,11 +58,13 @@ public abstract class InputMessage {
 			if ("YourName".equalsIgnoreCase(messageType)) {
 				return YourNameMessage.valueOf(args);
 			}
-			return UnknownMessage.valueOf(value);
+			return UnknownMessage.valueOf(messageType);
 
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 			return UnknownMessage.valueOf(value);
 		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
 			return UnknownMessage.valueOf(value);
 		}
 	}

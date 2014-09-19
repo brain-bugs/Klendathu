@@ -9,12 +9,13 @@ public enum ObjectType {
 	private ObjectType(int code) {
 		this.code = code;
 	}
+
 	public int getCode() {
 		return code;
 	}
-	
-	public static ObjectType valueOf(int code) {
-		for (ObjectType objectType: ObjectType.values()) {
+
+	public static ObjectType fromCode(int code) {
+		for (ObjectType objectType : ObjectType.values()) {
 			if (objectType.getCode() == code) {
 				return objectType;
 			}

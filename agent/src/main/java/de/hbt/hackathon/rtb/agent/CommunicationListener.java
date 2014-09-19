@@ -1,17 +1,9 @@
 package de.hbt.hackathon.rtb.agent;
 
+import de.hbt.hackathon.rtb.protocol.message.input.InputMessage;
+
 public interface CommunicationListener {
 
-	void onGameInitialized(boolean first);
-
-	void onGameStarted();
-
-	void onGameFinished();
-
-	void onRobotDied();
-
-	void onExitProgram();
-
-	void onEnergyLevel(int energyLevel);
+	void onMessage(InputMessage message); 
 
 }

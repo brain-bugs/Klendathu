@@ -20,7 +20,7 @@ public class GameOptionMessage extends InputMessage {
 		return value;
 	}
 	
-	public GameOptionMessage valueOf(String[] args) {
+	public static GameOptionMessage valueOf(String[] args) {
 		int gameOptionCodeType = Integer.parseInt(args[1]);
 		GameOptionType gameOptionType = GameOptionType.valueOf(gameOptionCodeType);
 		double value = Double.parseDouble(args[2]);

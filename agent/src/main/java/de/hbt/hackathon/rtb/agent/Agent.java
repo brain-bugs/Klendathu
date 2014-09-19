@@ -10,6 +10,13 @@ import org.slf4j.LoggerFactory;
 
 import de.hbt.hackathon.rtb.base.command.AbstractCommand;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
+import de.hbt.hackathon.rtb.protocol.message.input.DeadMessage;
+import de.hbt.hackathon.rtb.protocol.message.input.EnergyMessage;
+import de.hbt.hackathon.rtb.protocol.message.input.ExitRobotMessage;
+import de.hbt.hackathon.rtb.protocol.message.input.GameFinishesMessage;
+import de.hbt.hackathon.rtb.protocol.message.input.GameStartsMessage;
+import de.hbt.hackathon.rtb.protocol.message.input.InitializeMessage;
+import de.hbt.hackathon.rtb.protocol.message.input.InputMessage;
 import de.hbt.hackathon.rtb.protocol.message.output.ColourMessage;
 import de.hbt.hackathon.rtb.protocol.message.output.NameMessage;
 import de.hbt.hackathon.rtb.strategy.SimpleStrategy;
@@ -66,7 +73,23 @@ public class Agent implements CommunicationListener {
 	}
 
 	@Override
-	public void onGameInitialized(boolean first) {
+	public void onMessage(InputMessage message) {
+		if (message instanceof InitializeMessage) {
+			onGameInitialized(((InitializeMessage) message).isFirst());
+		} else if (message instanceof GameStartsMessage) {
+			onGameStarted();
+		} else if (message instanceof EnergyMessage) {
+			onEnergyLevel(((EnergyMessage) message).getEnergyLevel());
+		} else if (message instanceof DeadMessage) {
+			onRobotDied();
+		} else if (message instanceof GameFinishesMessage) {
+			onGameFinished();
+		} else if (message instanceof ExitRobotMessage) {
+			onExitProgram();
+		}
+	}
+
+	private void onGameInitialized(boolean first) {
 		if (first) {
 			LOGGER.info("Game initialized for the first time, sending name " + NAME + " and colours.");
 			communicator.sendOutputMessage(new NameMessage(NAME));
@@ -74,33 +97,27 @@ public class Agent implements CommunicationListener {
 		}
 	}
 
-	@Override
-	public void onGameStarted() {
+	private void onGameStarted() {
 		LOGGER.info("Game started.");
 		startGameTimer();
 	}
 
-	@Override
-	public void onGameFinished() {
+	private void onGameFinished() {
 		LOGGER.info("Game finished.");
 		stopGameTimer();
 	}
 
-	@Override
-	public void onRobotDied() {
+	private void onRobotDied() {
 		LOGGER.info("Our robot died :-(");
 		stopGameTimer();
 	}
 
-	@Override
-	public void onExitProgram() {
+	private void onExitProgram() {
 		LOGGER.info("Program exiting.");
 		communicator.setGameOver(true);
 	}
 
-	@Override
-	public void onEnergyLevel(int energyLevel) {
+	private void onEnergyLevel(int energyLevel) {
 		LOGGER.info("Received energy level: " + energyLevel);
 	}
-
 }

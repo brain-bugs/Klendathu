@@ -21,6 +21,7 @@ import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
 import de.hbt.hackathon.rtb.strategy.HealingStrategy;
 import de.hbt.hackathon.rtb.strategy.SimpleStrategy;
+import de.hbt.hackathon.rtb.strategy.WalkAndTalkStrategy;
 import de.hbt.hackathon.rtb.world.World;
 
 public class Agent implements CommunicationListener {
@@ -50,14 +51,17 @@ public class Agent implements CommunicationListener {
 
 		World world = new World(2);
 		AbstractStrategy strategy;
-		
+
 		AbstractStrategy simpleStrategy = new SimpleStrategy(world);
 		AbstractStrategy healingStrategy = new HealingStrategy(world);
+		AbstractStrategy walkAndTalkStrategy = new WalkAndTalkStrategy(world);
 
 		if (args[0].equals(simpleStrategy.getName())) {
 			strategy = simpleStrategy;
 		} else if (args[0].equals(healingStrategy.getName())) {
 			strategy = healingStrategy;
+		} else if (args[0].equals(walkAndTalkStrategy.getName())) {
+			strategy = walkAndTalkStrategy;
 		} else {
 			LOGGER.error("No bot name is given!");
 			strategy = simpleStrategy;

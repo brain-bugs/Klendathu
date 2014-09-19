@@ -1,5 +1,11 @@
 package de.hbt.hackathon.rtb.world;
 
-public class Mine implements RadarObject {
+import de.hbt.hackathon.rtb.base.Coordinate;
+
+public class Mine extends AbstractGameObject {
+
+	public Mine(Coordinate coordinate) {
+		super(coordinate);
+	}
 
 }

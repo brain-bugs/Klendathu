@@ -4,14 +4,14 @@ import de.hbt.hackathon.rtb.base.Coordinate;
 
 public abstract class AbstractGameObject implements GameObject {
 
-	private final Coordinate coordinate;
+	private final Coordinate currentPosition;
 	
 	public AbstractGameObject(Coordinate coordinate) {
-		this.coordinate = coordinate;
+		this.currentPosition = coordinate;
 	}
 
 	public Coordinate getCoordinate() {
-		return this.coordinate;
+		return this.currentPosition;
 	}
 
 }

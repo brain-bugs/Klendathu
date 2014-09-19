@@ -2,10 +2,10 @@ package de.hbt.hackathon.rtb.world;
 
 import de.hbt.hackathon.rtb.base.Coordinate;
 
-public class MyRobot extends AbstractGameObject {
+public class MyRobot extends Robot {
 
 	public MyRobot(Coordinate coordinate) {
-		super(coordinate);
+		super(coordinate, true);
 	}
 
 }

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import de.hbt.hackathon.rtb.protocol.Reader;
 import de.hbt.hackathon.rtb.protocol.Writer;
 import de.hbt.hackathon.rtb.protocol.message.input.DeadMessage;
+import de.hbt.hackathon.rtb.protocol.message.input.EnergyMessage;
 import de.hbt.hackathon.rtb.protocol.message.input.ExitRobotMessage;
 import de.hbt.hackathon.rtb.protocol.message.input.GameFinishesMessage;
 import de.hbt.hackathon.rtb.protocol.message.input.GameStartsMessage;
@@ -47,6 +48,10 @@ public class Communicator implements Runnable {
 				} else if (message instanceof GameStartsMessage) {
 					for (CommunicationListener listener : listeners) {
 						listener.onGameStarted();
+					}
+				} else if (message instanceof EnergyMessage) {
+					for (CommunicationListener listener : listeners) {
+						listener.onEnergyLevel(((EnergyMessage) message).getEnergyLevel());
 					}
 				} else if (message instanceof DeadMessage) {
 					for (CommunicationListener listener : listeners) {

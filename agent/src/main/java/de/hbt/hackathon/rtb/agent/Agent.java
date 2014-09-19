@@ -98,4 +98,9 @@ public class Agent implements CommunicationListener {
 		communicator.setGameOver(true);
 	}
 
+	@Override
+	public void onEnergyLevel(int energyLevel) {
+		LOGGER.info("Received energy level: " + energyLevel);
+	}
+
 }

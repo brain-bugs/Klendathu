@@ -48,21 +48,23 @@ public class HealingStrategy extends AbstractStrategy {
 				Targeter targeter = new Targeter();
 				targeter.driveTo(myRobot, cookie.getCurrentPosition());
 			}
-		} 
-		
+		}
+
 		if (!mines.isEmpty()) {
 			LOGGER.info("There are mines!");
 			if (myRobot != null) {
 				Mine mine = mines.iterator().next();
 				Targeter targeter = new Targeter();
-				targeter.aimCannonToAndShoot(myRobot, mine.getCurrentPosition());
+				messages.addAll(targeter.aimCannonToAndShoot(myRobot, mine.getCurrentPosition(), getCapabilities().getMaxCannonRotate(),
+						getCapabilities().getMinShotEnergy()));
 			}
 		} else if (!robots.isEmpty()) {
 			LOGGER.info("There are robots!");
 			if (myRobot != null) {
 				Robot robot = robots.iterator().next();
 				Targeter targeter = new Targeter();
-				targeter.aimCannonToAndShoot(myRobot, robot.getCurrentPosition());
+				messages.addAll(targeter.aimCannonToAndShoot(myRobot, robot.getCurrentPosition(), getCapabilities().getMaxCannonRotate(),
+						getCapabilities().getMaxShotEnergy() / 3d));
 			}
 		} else {
 			RotateAmountMessage rm = new RotateAmountMessage(EnumSet.of(AngleType.ROBOT), 1.0, 1.0);

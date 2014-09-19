@@ -24,6 +24,6 @@ public class CoordinatesMessage extends InputMessage {
 		double x = Double.parseDouble(args[1]);
 		double y = Double.parseDouble(args[2]);
 		double robotAngle = Double.parseDouble(args[3]);
-		return new CoordinatesMessage(new Coordinate(x, y), robotAngle);
+		return new CoordinatesMessage(new Coordinate(x, y, System.currentTimeMillis()), robotAngle);
 	}
 }

@@ -3,6 +3,9 @@ package de.hbt.hackathon.rtb.world;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
+
 import de.hbt.hackathon.rtb.base.geo.GeometricSet;
 import de.hbt.hackathon.rtb.base.geo.JTSQuadTreeAdapter;
 
@@ -24,6 +27,18 @@ public class World {
 		robots = new JTSQuadTreeAdapter<Robot>();
 		shots = new JTSQuadTreeAdapter<Shot>();
 		walls = new JTSQuadTreeAdapter<Wall>();
+	}
+
+	public Envelope getBoundingBox() {
+		Envelope envelope = new Envelope();
+		envelope.expandToInclude(cookies.getCoveredGeometry().getEnvelopeInternal());
+		envelope.expandToInclude(mines.getCoveredGeometry().getEnvelopeInternal());
+		envelope.expandToInclude(robots.getCoveredGeometry().getEnvelopeInternal());
+		envelope.expandToInclude(shots.getCoveredGeometry().getEnvelopeInternal());
+		envelope.expandToInclude(walls.getCoveredGeometry().getEnvelopeInternal());
+		de.hbt.hackathon.rtb.base.type.Coordinate currentPosition = myRobot.getCurrentPosition();
+		envelope.expandToInclude(new Coordinate(currentPosition.getX(), currentPosition.getY()));
+		return envelope;
 	}
 
 	public void setArena(Arena arena) {
@@ -73,6 +88,26 @@ public class World {
 	public void addShot(Shot shot) {
 		LOG.debug("Added " + shot);
 		shots.add(shot);
+	}
+
+	public GeometricSet<Cookie> getCookies() {
+		return cookies;
+	}
+
+	public GeometricSet<Mine> getMines() {
+		return mines;
+	}
+
+	public GeometricSet<Robot> getRobots() {
+		return robots;
+	}
+
+	public GeometricSet<Shot> getShots() {
+		return shots;
+	}
+
+	public GeometricSet<Wall> getWalls() {
+		return walls;
 	}
 
 }

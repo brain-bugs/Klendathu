@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 /**
  * Implementation of a geometric set backed by a Quadtree implementation of the
@@ -23,7 +25,9 @@ import com.vividsolutions.jts.geom.Geometry;
  */
 public class JTSQuadTreeAdapter<E extends GeoObject> implements GeometricSet<E> {
 
-	private com.vividsolutions.jts.index.quadtree.Quadtree jtsQuadTree;
+	private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
+
+	private final com.vividsolutions.jts.index.quadtree.Quadtree jtsQuadTree;
 
 	private Geometry boundingBox;
 
@@ -193,6 +197,9 @@ public class JTSQuadTreeAdapter<E extends GeoObject> implements GeometricSet<E> 
 				}
 			}
 		}
+		if (boundingBox == null)
+			return GEOMETRY_FACTORY.createPoint((Coordinate) null);
+
 		return boundingBox;
 	}
 

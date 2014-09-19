@@ -1,6 +1,17 @@
 package de.hbt.hackathon.rtb.agent;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import com.vividsolutions.jts.geom.Envelope;
+
+import de.hbt.hackathon.rtb.base.geo.GeometricSet;
 import de.hbt.hackathon.rtb.base.message.input.CoordinatesMessage;
+import de.hbt.hackathon.rtb.base.message.input.EnergyMessage;
 import de.hbt.hackathon.rtb.base.message.input.InfoMessage;
 import de.hbt.hackathon.rtb.base.message.input.InputMessage;
 import de.hbt.hackathon.rtb.base.message.input.RadarMessage;
@@ -21,10 +32,74 @@ public class WorldUpdater implements CommunicationListener {
 
 	private RadarMessage radarMessage;
 
-	private Coordinate coordinate;
+	private RobotInfoMessage robotInfoMessage;
+
+	private final JPanel debugPanel = new JPanel() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void paintComponent(java.awt.Graphics g) {
+			g.clearRect(0, 0, 500, 500);
+			drawWorld(g);
+		};
+	};
+
+	private InfoMessage infoMessage;
+
+	void drawWorld(Graphics g) {
+		MyRobot myRobot = world.getMyRobot();
+		if (myRobot == null)
+			return;
+
+		Coordinate currentPosition = myRobot.getCurrentPosition();
+		double x = currentPosition.getX();
+		double y = currentPosition.getY();
+		Envelope boundingBox = world.getBoundingBox();
+		double minX = boundingBox.getMinX();
+		double minY = boundingBox.getMinY();
+
+		double offsetX = 0;
+		if (minX < 0)
+			offsetX = -minX;
+
+		double offsetY = 0;
+		if (minY < 0)
+			offsetY = -minY;
+
+		double height = boundingBox.getHeight();
+		double width = boundingBox.getWidth();
+		double scaleX = 500 / width;
+		double scaleY = 500 / height;
+
+		g.setColor(Color.GREEN);
+		drawPoint(g, x, y, offsetX, offsetY, scaleX, scaleY);
+
+		GeometricSet<Wall> walls = world.getWalls();
+		for (Wall wall : walls) {
+			g.setColor(Color.BLACK);
+			Coordinate c = wall.getCurrentPosition();
+			drawPoint(g, c.getX(), c.getY(), offsetX, offsetY, scaleX, scaleY);
+		}
+
+		GeometricSet<Robot> robots = world.getRobots();
+		for (Robot robot : robots) {
+			Coordinate c = robot.getCurrentPosition();
+			g.setColor(Color.RED);
+			drawPoint(g, c.getX(), c.getY(), offsetX, offsetY, scaleX, scaleY);
+		}
+	}
+
+	private void drawPoint(Graphics g, double x, double y, double offsetX, double offsetY, double scaleX, double scaleY) {
+		g.drawOval((int) ((offsetX + x) * scaleX), 500 - (int) ((offsetY + y) * scaleY), 2, 2);
+	}
 
 	public WorldUpdater(World world) {
 		this.world = world;
+		JFrame debugFrame = new JFrame("Debug");
+		debugFrame.setContentPane(debugPanel);
+		debugPanel.setPreferredSize(new Dimension(500, 500));
+		debugFrame.pack();
+		debugFrame.setVisible(true);
 	}
 
 	@Override
@@ -44,11 +119,22 @@ public class WorldUpdater implements CommunicationListener {
 			myRobot.setRotationAngle(robotAngle);
 		} else if (message instanceof RadarMessage) {
 			radarMessage = (RadarMessage) message;
-			// wait for info message
+			// wait for energy message
+		} else if (message instanceof RobotInfoMessage) {
+			robotInfoMessage = (RobotInfoMessage) message;
+			// wait for energy message
 		} else if (message instanceof InfoMessage) {
+			infoMessage = (InfoMessage) message;
+			// wait for energy message
+		} else if (message instanceof EnergyMessage) {
+			int myEnergyLevel = ((EnergyMessage) message).getEnergyLevel();
+			myRobot.setEnergyLevel(myEnergyLevel);
+
 			ObjectType objectType = radarMessage.getObjectType();
-			double radarAngle = radarMessage.getRadarAngle();
 			double radarDistance = radarMessage.getRadarDistance();
+
+			double rotationAngle = myRobot.getRotationAngle();
+			double radarAngle = radarMessage.getRadarAngle() + rotationAngle;
 
 			Coordinate currentPosition = myRobot.getCurrentPosition();
 			double cx = currentPosition.getX();
@@ -56,8 +142,8 @@ public class WorldUpdater implements CommunicationListener {
 
 			double dx = radarDistance * Math.cos(radarAngle);
 			double dy = radarDistance * Math.sin(radarAngle);
-			double timeStamp = ((InfoMessage) message).getTime();
-			coordinate = new Coordinate(cx + dx, cy + dy, timeStamp);
+			double timeStamp = infoMessage.getTime();
+			Coordinate coordinate = new Coordinate(cx + dx, cy + dy, timeStamp);
 			switch (objectType) {
 			case COOKIE:
 				world.addCookie(new Cookie(coordinate));
@@ -73,17 +159,16 @@ public class WorldUpdater implements CommunicationListener {
 				break;
 			case ROBOT:
 				// wait for robot info message
+				double energyLevel = robotInfoMessage.getEnergyLevel();
+				boolean teamMate = robotInfoMessage.isTeamMate();
+				Robot robot = new Robot(coordinate, teamMate);
+				robot.setEnergyLevel(energyLevel);
+				world.addRobot(robot);
 				break;
 			default:
 				break;
 			}
-		} else if (message instanceof RobotInfoMessage) {
-			RobotInfoMessage robotInfoMessage = (RobotInfoMessage) message;
-			double energyLevel = robotInfoMessage.getEnergyLevel();
-			boolean teamMate = robotInfoMessage.isTeamMate();
-			Robot robot = new Robot(coordinate, teamMate);
-			robot.setEnergyLevel(energyLevel);
-			world.addRobot(robot);
 		}
+		debugPanel.repaint(50);
 	}
 }

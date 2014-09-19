@@ -13,23 +13,16 @@ import de.hbt.hackathon.rtb.simplebot.SimpleBot;
 public class Agent {
 	
 	public static void main(String[] args) throws IOException {
-		Reader reader = new Reader();
 		Writer writer = new Writer();
+		Communicator communicator = new Communicator();
+		Thread communcatorThread = new Thread(communicator);
+		communcatorThread.start();
+		
 		
 		AbstractStrategy bot = new SimpleBot(writer);
 		
 		whileloop: do {
 			
-			try {
-				InputMessage message = reader.read();
-				if(message instanceof InitializeMessage) {
-					bot.processInitialize();
-				}
-				
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				break whileloop;
-			}
 			
 		} while (true);
 	}

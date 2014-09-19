@@ -54,11 +54,11 @@ public class JTSQuadTreeAdapter<E extends GeoObject> implements GeometricSet<E> 
 		Iterator<E> iterator = iterator(geoObject.getGeometry(), geoObject.getGeometry());
 		while (iterator.hasNext()) {
 			GeoObject other = iterator.next();
-			if (other == geoObject) {
-				return true;
-			}
 			if (Double.compare(1E-04, other.getGeometry().distance(geoObject.getGeometry())) < 0) {
 				return false;
+			}
+			if (other.getClass() == geoObject.getClass()) {
+				return true;
 			}
 		}
 		return false;

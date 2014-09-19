@@ -25,6 +25,10 @@ public class Coordinate {
 		return timeStamp;
 	}
 
+	public double distance(Coordinate other) {
+		return Math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
+	}
+
 	@Override
 	public String toString() {
 		return "Coordinate[x=" + x + ",y=" + y + ",timeStamp=" + timeStamp;

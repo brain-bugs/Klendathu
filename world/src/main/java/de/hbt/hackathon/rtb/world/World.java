@@ -1,5 +1,7 @@
 package de.hbt.hackathon.rtb.world;
 
+import java.util.Iterator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +23,10 @@ public class World {
 	private final GeometricSet<Shot> shots;
 	private final GeometricSet<Wall> walls;
 
-	public World() {
+	private final int maxTimeDynamicData;
+
+	public World(int maxTimeDynamicData) {
+		this.maxTimeDynamicData = maxTimeDynamicData;
 		cookies = new JTSQuadTreeAdapter<Cookie>();
 		mines = new JTSQuadTreeAdapter<Mine>();
 		robots = new JTSQuadTreeAdapter<Robot>();
@@ -108,6 +113,22 @@ public class World {
 
 	public GeometricSet<Wall> getWalls() {
 		return walls;
+	}
+
+	public void gc(double currentTime) {
+		gc(robots, currentTime);
+		gc(shots, currentTime);
+		gc(cookies, currentTime);
+		gc(mines, currentTime);
+	}
+
+	private void gc(GeometricSet<? extends GameObject> objects, double currentTime) {
+		for (Iterator<? extends GameObject> i = objects.iterator(); i.hasNext();) {
+			GameObject gameObject = i.next();
+			if (gameObject.getCurrentPosition().getTimeStamp() < (currentTime - maxTimeDynamicData)) {
+				objects.remove(gameObject);
+			}
+		}
 	}
 
 }

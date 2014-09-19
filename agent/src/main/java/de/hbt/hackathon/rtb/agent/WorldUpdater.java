@@ -47,9 +47,11 @@ public class WorldUpdater implements CommunicationListener {
 
 	private InfoMessage infoMessage;
 
+	private CoordinatesMessage coordinatesMessage;
+
 	void drawWorld(Graphics g) {
 		MyRobot myRobot = world.getMyRobot();
-		if (myRobot == null)
+		if (myRobot == null || myRobot.getCurrentPosition() == null)
 			return;
 
 		Coordinate currentPosition = myRobot.getCurrentPosition();
@@ -81,7 +83,8 @@ public class WorldUpdater implements CommunicationListener {
 		drawGameObjects(g, offsetX, offsetY, scaleX, scaleY, world.getMines(), Color.CYAN);
 	}
 
-	private void drawGameObjects(Graphics g, double offsetX, double offsetY, double scaleX, double scaleY, GeometricSet<? extends GameObject> objects, Color color) {
+	private void drawGameObjects(Graphics g, double offsetX, double offsetY, double scaleX, double scaleY,
+			GeometricSet<? extends GameObject> objects, Color color) {
 		for (GameObject object : objects) {
 			Coordinate c = object.getCurrentPosition();
 			g.setColor(color);
@@ -90,7 +93,7 @@ public class WorldUpdater implements CommunicationListener {
 	}
 
 	private void drawPoint(Graphics g, double x, double y, double offsetX, double offsetY, double scaleX, double scaleY) {
-		g.fillOval((int) ((offsetX + x) * scaleX), 500 - (int) ((offsetY + y) * scaleY), 2, 2);
+		g.fillOval((int) ((offsetX + x) * scaleX) - 2, 500 - (int) ((offsetY + y) * scaleY) - 2, 4, 4);
 	}
 
 	public WorldUpdater(World world) {
@@ -106,17 +109,8 @@ public class WorldUpdater implements CommunicationListener {
 	public void onMessage(InputMessage message) {
 		MyRobot myRobot = this.world.getMyRobot();
 		if (message instanceof CoordinatesMessage) {
-			CoordinatesMessage coordinatesMessage = (CoordinatesMessage) message;
-			Coordinate coordinate = coordinatesMessage.getCoordinate();
-			if (myRobot == null) {
-				myRobot = new MyRobot(coordinate);
-				world.setMyRobot(myRobot);
-			} else {
-				myRobot.setCurrentPosition(coordinate);
-			}
-
-			double robotAngle = coordinatesMessage.getRobotAngle();
-			myRobot.setRotationAngle(robotAngle);
+			coordinatesMessage = (CoordinatesMessage) message;
+			// wait for energy message
 		} else if (message instanceof RadarMessage) {
 			radarMessage = (RadarMessage) message;
 			// wait for energy message
@@ -127,11 +121,29 @@ public class WorldUpdater implements CommunicationListener {
 			infoMessage = (InfoMessage) message;
 			// wait for energy message
 		} else if (message instanceof EnergyMessage) {
+			double x = coordinatesMessage.getX();
+			double y = coordinatesMessage.getY();
+			double timeStamp = infoMessage.getTime();
+			Coordinate coordinate = new Coordinate(x, y, timeStamp);
+			if (myRobot == null) {
+				myRobot = new MyRobot(coordinate);
+				world.setMyRobot(myRobot);
+			} else {
+				myRobot.setCurrentPosition(coordinate);
+			}
+			myRobot.setSpeed(infoMessage.getSpeed());
+
+			double robotAngle = coordinatesMessage.getRobotAngle();
+			myRobot.setRotationAngle(robotAngle);
+
 			int myEnergyLevel = ((EnergyMessage) message).getEnergyLevel();
 			myRobot.setEnergyLevel(myEnergyLevel);
 
 			ObjectType objectType = radarMessage.getObjectType();
 			double radarDistance = radarMessage.getRadarDistance();
+
+			if (infoMessage.getSpeed() > 0.5 && radarDistance > 4)
+				return; // too long distances may lead to errornous results
 
 			double rotationAngle = myRobot.getRotationAngle();
 			double radarAngle = radarMessage.getRadarAngle() + rotationAngle;
@@ -142,33 +154,35 @@ public class WorldUpdater implements CommunicationListener {
 
 			double dx = radarDistance * Math.cos(radarAngle);
 			double dy = radarDistance * Math.sin(radarAngle);
-			double timeStamp = infoMessage.getTime();
-			Coordinate coordinate = new Coordinate(cx + dx, cy + dy, timeStamp);
+
+			Coordinate radarObjectCoordinate = new Coordinate(cx + dx, cy + dy, timeStamp);
 			switch (objectType) {
 			case COOKIE:
-				world.addCookie(new Cookie(coordinate));
+				world.addCookie(new Cookie(radarObjectCoordinate));
 				break;
 			case MINE:
-				world.addMine(new Mine(coordinate));
+				world.addMine(new Mine(radarObjectCoordinate));
 				break;
 			case SHOT:
-				world.addShot(new Shot(coordinate));
+				world.addShot(new Shot(radarObjectCoordinate));
 				break;
 			case WALL:
-				world.addWall(new Wall(coordinate));
+				world.addWall(new Wall(radarObjectCoordinate));
 				break;
 			case ROBOT:
 				// wait for robot info message
 				double energyLevel = robotInfoMessage.getEnergyLevel();
 				boolean teamMate = robotInfoMessage.isTeamMate();
-				Robot robot = new Robot(coordinate, teamMate);
+				Robot robot = new Robot(radarObjectCoordinate, teamMate);
 				robot.setEnergyLevel(energyLevel);
 				world.addRobot(robot);
 				break;
 			default:
 				break;
 			}
+
+			world.gc(infoMessage.getTime());
+			debugPanel.repaint(50);
 		}
-		debugPanel.repaint(50);
 	}
 }

@@ -6,7 +6,7 @@ import de.hbt.hackathon.rtb.base.type.Coordinate;
 
 public abstract class FixedGameObject extends DefaultGeoObject implements GameObject {
 
-	private final Coordinate currentPosition;
+	private Coordinate currentPosition;
 
 	public FixedGameObject(Coordinate coordinate) {
 		super(GeometryBuilder.INSTANCE.apply(coordinate));
@@ -16,6 +16,10 @@ public abstract class FixedGameObject extends DefaultGeoObject implements GameOb
 	@Override
 	public Coordinate getCurrentPosition() {
 		return this.currentPosition;
+	}
+
+	protected void setCurrentPosition(Coordinate currentCoordinate) {
+		currentPosition = currentCoordinate;
 	}
 
 	@Override

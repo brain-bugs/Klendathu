@@ -1,20 +1,23 @@
 package de.hbt.hackathon.rtb.base.message.input;
 
-import de.hbt.hackathon.rtb.base.type.Coordinate;
-
 
 public class CoordinatesMessage extends InputMessage {
 
-	private final Coordinate coordinate;
+	private final double x, y;
 	private final double robotAngle;
 
-	private CoordinatesMessage(Coordinate coordinate, double robotAngle) {
-		this.coordinate = coordinate;
+	private CoordinatesMessage(double x, double y, double robotAngle) {
+		this.x = x;
+		this.y = y;
 		this.robotAngle = robotAngle;
 	}
 
-	public Coordinate getCoordinate() {
-		return coordinate;
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
 	}
 
 	public double getRobotAngle() {
@@ -25,6 +28,6 @@ public class CoordinatesMessage extends InputMessage {
 		double x = Double.parseDouble(args[1]);
 		double y = Double.parseDouble(args[2]);
 		double robotAngle = Double.parseDouble(args[3]);
-		return new CoordinatesMessage(new Coordinate(x, y, System.currentTimeMillis()), robotAngle);
+		return new CoordinatesMessage(x, y, robotAngle);
 	}
 }

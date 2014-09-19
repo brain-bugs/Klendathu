@@ -31,7 +31,7 @@ public class Targeter {
 		double targetAngle = AngleUtils.getAngle(ownPosition.getX(), ownPosition.getY(), target.getX(), target.getY());
 		return targetAngle - ownAngle;
 	}
-	
+
 	public List<OutputMessage> driveTo(MyRobot myRobot, Coordinate targetCoordinate) {
 		List<OutputMessage> messages = new ArrayList<OutputMessage>();
 		this.setOwnLocation(myRobot.getCurrentPosition(), AngleUtils.normalizeAngle(myRobot.getRotationAngle()));
@@ -57,11 +57,12 @@ public class Targeter {
 			BrakeMessage bm = new BrakeMessage(0.0);
 			messages.add(bm);
 		}
-		
+
 		return messages;
 	}
-	
-	public List<OutputMessage> aimCannonToAndShoot(MyRobot myRobot, Coordinate targetCoordinate) {
+
+	public List<OutputMessage> aimCannonToAndShoot(MyRobot myRobot, Coordinate targetCoordinate, double shootEnergy,
+			double cannonRotateSpeed) {
 		List<OutputMessage> messages = new ArrayList<OutputMessage>();
 		this.setOwnLocation(myRobot.getCurrentPosition(), AngleUtils.normalizeAngle(myRobot.getCannonAngle()));
 		double rotationAngle = AngleUtils.normalizeAngle(this.calculateAngleTowards(targetCoordinate));
@@ -69,17 +70,19 @@ public class Targeter {
 
 		LOGGER.info("angle to target: " + Math.toDegrees(rotationAngle));
 		LOGGER.debug("My position: " + myRobot.getCurrentPosition() + ", cannon angle: "
-				+ Math.toRadians(AngleUtils.normalizeAngle(myRobot.getCannonAngle())));
+				+ Math.toDegrees(AngleUtils.normalizeAngle(myRobot.getCannonAngle())) + ", rotation angle: "
+				+ Math.toDegrees(AngleUtils.normalizeAngle(myRobot.getRotationAngle())));
 		LOGGER.info("Target position: " + targetCoordinate);
-		
-		if (rotationAngle > 175d && rotationAngle < 185d) {
-			messages.add(new ShootMessage(1));
+
+		if (Math.toDegrees(rotationAngle) < 5 || Math.toDegrees(rotationAngle) > 355) {
+			messages.add(new ShootMessage(shootEnergy));
+			LOGGER.info("Shooting with " + shootEnergy + " energy");
 		}
-			
-		RotateAmountMessage rm = new RotateAmountMessage(EnumSet.of(AngleType.CANNON), 1.0, angleOffset);
-		LOGGER.info("Rotate by " + angleOffset + " radians");
+
+		RotateAmountMessage rm = new RotateAmountMessage(EnumSet.of(AngleType.CANNON), cannonRotateSpeed, angleOffset);
+		LOGGER.info("Rotate cannon by " + angleOffset + " radians");
 		messages.add(rm);
-		
+
 		return messages;
 	}
 

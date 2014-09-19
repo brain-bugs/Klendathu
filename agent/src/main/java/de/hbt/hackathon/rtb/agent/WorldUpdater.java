@@ -81,7 +81,8 @@ public class WorldUpdater implements CommunicationListener {
 		drawGameObjects(g, offsetX, offsetY, scaleX, scaleY, world.getMines(), Color.CYAN);
 	}
 
-	private void drawGameObjects(Graphics g, double offsetX, double offsetY, double scaleX, double scaleY, GeometricSet<? extends GameObject> objects, Color color) {
+	private void drawGameObjects(Graphics g, double offsetX, double offsetY, double scaleX, double scaleY,
+			GeometricSet<? extends GameObject> objects, Color color) {
 		for (GameObject object : objects) {
 			Coordinate c = object.getCurrentPosition();
 			g.setColor(color);
@@ -135,6 +136,8 @@ public class WorldUpdater implements CommunicationListener {
 
 			double rotationAngle = myRobot.getRotationAngle();
 			double radarAngle = radarMessage.getRadarAngle() + rotationAngle;
+			double cannonAngle = infoMessage.getCannonAngle() + rotationAngle;
+			myRobot.setCannonAngle(cannonAngle);
 
 			Coordinate currentPosition = myRobot.getCurrentPosition();
 			double cx = currentPosition.getX();

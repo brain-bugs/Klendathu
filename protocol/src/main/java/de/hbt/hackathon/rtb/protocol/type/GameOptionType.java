@@ -18,6 +18,10 @@ public enum GameOptionType {
 	// 0 - no coordinates), 1 - coordniates are given relative the starting
 	// position,2 - absolute coordinates
 	SEND_ROBOT_COORDINATES(14);
+	
+	public static final double SEND_ROBOT_COORDINATES_NEVER = 0.0;
+	public static final double SEND_ROBOT_COORDINATES_RELATIVE = 1.0;
+	public static final double SEND_ROBOT_COORDINATES_ABSOLUTE = 2.0;
 
 	private final int code;
 

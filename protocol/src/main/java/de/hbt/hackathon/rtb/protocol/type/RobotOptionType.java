@@ -14,6 +14,17 @@ public enum RobotOptionType {
 	// This option should always be sent as soon as possible
 	USE_NON_BLOCKING(3);
 	
+	public static final double SEND_SIGNAL_FALSE = 0.0;
+	public static final double SEND_SIGNAL_TRUE = 1.0;
+	
+	public static final double SEND_ROTATION_REACHED_NEVER = 0.0;
+	public static final double SEND_ROTATION_REACHED_AFTER_FINISHED = 1.0;
+	public static final double SEND_ROTATION_REACHED_SWEEP_DIRECTION_CHANGES = 2.0;
+	public static final double SEND_ROTATION_REACHED_ALL = 3.0;
+	
+	public static final double USE_NON_BLOCKING_FALSE = 0.0;
+	public static final double USE_NON_BLOCKING_TRUE = 1.0;
+	
 	private final int code;
 	
 	private RobotOptionType(int code) {

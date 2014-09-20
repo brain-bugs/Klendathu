@@ -29,7 +29,7 @@ public class Agent implements CommunicationListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Agent.class);
 
 	// technical configuration
-	private static final int UPDATES_PER_SECOND = 10;
+	private static final int UPDATES_PER_SECOND = 20;
 
 	// game configuration
 	private static final String NAME = "Brainbug";
@@ -49,7 +49,7 @@ public class Agent implements CommunicationListener {
 	public static void main(String[] args) throws IOException {
 		Communicator communicator = new Communicator();
 
-		World world = new World(2);
+		World world = new World(0.5);
 		AbstractStrategy strategy;
 
 		AbstractStrategy simpleStrategy = new SimpleStrategy(world);

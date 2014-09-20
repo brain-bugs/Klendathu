@@ -15,14 +15,17 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.operation.buffer.BufferParameters;
 
+import de.hbt.hackathon.rtb.base.geo.JTSQuadTreeAdapter;
 import de.hbt.hackathon.rtb.base.message.AngleType;
 import de.hbt.hackathon.rtb.base.message.output.AccelerateMessage;
 import de.hbt.hackathon.rtb.base.message.output.BrakeMessage;
 import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
 import de.hbt.hackathon.rtb.base.message.output.RotateAmountMessage;
 import de.hbt.hackathon.rtb.base.message.output.RotateMessage;
+import de.hbt.hackathon.rtb.base.message.output.RotateToMessage;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
 import de.hbt.hackathon.rtb.world.MyRobot;
+import de.hbt.hackathon.rtb.world.Robot;
 import de.hbt.hackathon.rtb.world.World;
 
 public class WalkAndTalkStrategy extends AbstractStrategy {
@@ -40,6 +43,10 @@ public class WalkAndTalkStrategy extends AbstractStrategy {
 	private int counter = 0;
 
 	private final Random random = new Random();
+
+	private Robot targetRobot;
+
+	Targeter targeter = new Targeter();
 
 	public WalkAndTalkStrategy(World world) {
 		this.world = world;
@@ -65,19 +72,32 @@ public class WalkAndTalkStrategy extends AbstractStrategy {
 		Coordinate to = new Coordinate(pos.getX() + dx, pos.getY() + dy);
 		LineString centerLine = GF.createLineString(new Coordinate[] { from, to });
 		Geometry buffer = centerLine.buffer(0.5, 1, BufferParameters.CAP_FLAT);
-		LOG.debug(buffer.toString());
 		List<OutputMessage> messages = new LinkedList<OutputMessage>();
 
 		RotateMessage rm = new RotateMessage(EnumSet.of(AngleType.RADAR), 1.0);
 		messages.add(rm);
 
-		if (world.getMines().intersectsGeometry(buffer) || world.getRobots().intersectsGeometry(buffer)
-				|| world.getWalls().intersectsGeometry(buffer)) {
+		JTSQuadTreeAdapter<Robot> robots = world.getRobots();
+		if (!robots.isEmpty()) {
+			targetRobot = (Robot) robots.getIntersecting(buffer);
+			if (targetRobot == null)
+				targetRobot = robots.iterator().next();
+		}
+
+		if (targetRobot != null) {
+			de.hbt.hackathon.rtb.base.type.Coordinate targetPos = targetRobot.getCurrentPosition();
+			messages.addAll(targeter.aimCannonToAndShoot(myself, targetPos, getCapabilities().getMaxCannonRotate(), getCapabilities()
+					.getMaxShotEnergy() / 3d));
+			double targetAngle = Math.PI + AngleUtils.getAngle(pos.getX(), pos.getY(), targetPos.getX(), targetPos.getY());
+			messages.add(new RotateToMessage(EnumSet.of(AngleType.ROBOT), getCapabilities().getMaxRotate(), targetAngle));
+			messages.add(new BrakeMessage(0.0));
+			messages.add(new AccelerateMessage(2.0));
+		} else if (world.getMines().intersectsGeometry(buffer) || world.getWalls().intersectsGeometry(buffer)) {
 			LOG.info("Achtung Mauer!");
 			double rotateAmount = turnDirection * 2.0 * random.nextDouble();
-			messages.add(new RotateAmountMessage(EnumSet.of(AngleType.ROBOT), 2.0, rotateAmount));
+			messages.add(new RotateAmountMessage(EnumSet.of(AngleType.ROBOT), getCapabilities().getMaxRotate(), rotateAmount));
 			counter++;
-			if (myself.getSpeed() >= 2) {
+			if (myself.getSpeed() >= 2.5) {
 				messages.add(new AccelerateMessage(-1.0));
 				messages.add(new BrakeMessage(1.0));
 			}
@@ -86,7 +106,6 @@ public class WalkAndTalkStrategy extends AbstractStrategy {
 				turnDirection *= -1;
 			}
 		} else {
-			LOG.info("Keine Mauer!");
 			messages.add(new BrakeMessage(0.0));
 			messages.add(new AccelerateMessage(2.0));
 		}

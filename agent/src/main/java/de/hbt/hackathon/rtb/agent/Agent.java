@@ -66,6 +66,7 @@ public class Agent implements CommunicationListener {
 			LOGGER.error("No bot name is given!");
 			strategy = simpleStrategy;
 		}
+		LOGGER.info("Strategy implementation: " + strategy.getClass().getSimpleName());
 
 		WorldUpdater worldUpdater = new WorldUpdater(world);
 		CapabilitiesBuilder capabilitiesBuilder = new CapabilitiesBuilder();

@@ -50,8 +50,7 @@ public class Agent implements CommunicationListener {
 
 	public static void main(String[] args) throws IOException {
 		Communicator communicator = new Communicator();
-
-		final World world = new World(0.5);
+		final World world = new World();
 
 //		AbstractStrategy simpleStrategy = new SimpleStrategy(world);
 		AbstractStrategy healingStrategy = new HealingStrategy(world); // offensive strategie

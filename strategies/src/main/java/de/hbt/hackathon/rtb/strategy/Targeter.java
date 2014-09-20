@@ -97,7 +97,7 @@ public class Targeter {
 			}
 		}
 
-		RotateAmountMessage rm = new RotateAmountMessage(EnumSet.of(AngleType.CANNON), cannonRotateSpeed, angleOffset);
+		RotateAmountMessage rm = new RotateAmountMessage(EnumSet.of(AngleType.CANNON, AngleType.RADAR), cannonRotateSpeed, angleOffset);
 		LOGGER.info("Rotate cannon by " + angleOffset + " radians with speed " + cannonRotateSpeed);
 		messages.add(rm);
 

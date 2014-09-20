@@ -2,6 +2,7 @@ package de.hbt.hackathon.rtb.strategy;
 
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -22,7 +23,6 @@ import de.hbt.hackathon.rtb.base.message.output.BrakeMessage;
 import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
 import de.hbt.hackathon.rtb.base.message.output.RotateAmountMessage;
 import de.hbt.hackathon.rtb.base.message.output.RotateMessage;
-import de.hbt.hackathon.rtb.base.message.output.RotateToMessage;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
 import de.hbt.hackathon.rtb.world.MyRobot;
 import de.hbt.hackathon.rtb.world.Robot;
@@ -66,7 +66,7 @@ public class WalkAndTalkStrategy extends AbstractStrategy {
 		double rotationAngle = myself.getRotationAngle();
 		de.hbt.hackathon.rtb.base.type.Coordinate pos = myself.getCurrentPosition();
 		Coordinate from = new Coordinate(pos.getX(), pos.getY());
-		double distance = myself.getSpeed();
+		double distance = myself.getSpeed() * 1.5;
 		double dx = distance * Math.cos(rotationAngle);
 		double dy = distance * Math.sin(rotationAngle);
 		Coordinate to = new Coordinate(pos.getX() + dx, pos.getY() + dy);
@@ -74,27 +74,22 @@ public class WalkAndTalkStrategy extends AbstractStrategy {
 		Geometry buffer = centerLine.buffer(0.5, 1, BufferParameters.CAP_FLAT);
 		List<OutputMessage> messages = new LinkedList<OutputMessage>();
 
-		RotateMessage rm = new RotateMessage(EnumSet.of(AngleType.RADAR), 1.0);
-		messages.add(rm);
-
 		JTSQuadTreeAdapter<Robot> robots = world.getRobots();
 		if (!robots.isEmpty()) {
 			targetRobot = (Robot) robots.getIntersecting(buffer);
-			if (targetRobot == null)
-				targetRobot = robots.iterator().next();
+			Iterator<Robot> iterator = robots.iterator();
+			while ((targetRobot == null || targetRobot.isTeamMate()) && iterator.hasNext()) {
+				targetRobot = iterator.next();
+			}
+			if (targetRobot.isTeamMate())
+				targetRobot = null;
+		} else {
+			targetRobot = null;
 		}
 
-		if (targetRobot != null) {
-			de.hbt.hackathon.rtb.base.type.Coordinate targetPos = targetRobot.getCurrentPosition();
-			messages.addAll(targeter.aimCannonToAndShoot(myself, targetPos, getCapabilities().getMaxCannonRotate(), getCapabilities()
-					.getMaxShotEnergy() / 3d));
-			double targetAngle = Math.PI + AngleUtils.getAngle(pos.getX(), pos.getY(), targetPos.getX(), targetPos.getY());
-			messages.add(new RotateToMessage(EnumSet.of(AngleType.ROBOT), getCapabilities().getMaxRotate(), targetAngle));
-			messages.add(new BrakeMessage(0.0));
-			messages.add(new AccelerateMessage(2.0));
-		} else if (world.getMines().intersectsGeometry(buffer) || world.getWalls().intersectsGeometry(buffer)) {
+		if (world.getMines().intersectsGeometry(buffer) || world.getWalls().intersectsGeometry(buffer)) {
 			LOG.info("Achtung Mauer!");
-			double rotateAmount = turnDirection * 2.0 * random.nextDouble();
+			double rotateAmount = turnDirection * 2.5 * random.nextDouble();
 			messages.add(new RotateAmountMessage(EnumSet.of(AngleType.ROBOT), getCapabilities().getMaxRotate(), rotateAmount));
 			counter++;
 			if (myself.getSpeed() >= 2.5) {
@@ -105,9 +100,22 @@ public class WalkAndTalkStrategy extends AbstractStrategy {
 				counter = 0;
 				turnDirection *= -1;
 			}
-		} else {
+		} else if (targetRobot != null) {
+			RotateMessage rm = new RotateMessage(EnumSet.of(AngleType.RADAR, AngleType.CANNON), 0.0);
+			messages.add(rm);
+			de.hbt.hackathon.rtb.base.type.Coordinate targetPos = targetRobot.getCurrentPosition();
+			messages.addAll(targeter.aimCannonToAndShoot(myself, targetPos, getCapabilities().getMaxCannonRotate(), getCapabilities()
+					.getMaxShotEnergy() / 3d));
+			targeter.setOwnLocation(myself.getCurrentPosition(), AngleUtils.normalizeAngle(myself.getRotationAngle()));
+			double targetAngle = AngleUtils.normalizeAngle(targeter.calculateAngleTowards(targetRobot.getCurrentPosition()));
+			messages.add(new RotateAmountMessage(EnumSet.of(AngleType.ROBOT), getCapabilities().getMaxRotate(), targetAngle));
 			messages.add(new BrakeMessage(0.0));
-			messages.add(new AccelerateMessage(2.0));
+			messages.add(new AccelerateMessage(0.5));
+		} else {
+			RotateMessage rm = new RotateMessage(EnumSet.of(AngleType.RADAR, AngleType.CANNON), 0.5);
+			messages.add(rm);
+			messages.add(new BrakeMessage(0.0));
+			messages.add(new AccelerateMessage(1.0));
 		}
 
 		return messages;

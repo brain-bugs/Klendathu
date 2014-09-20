@@ -23,9 +23,9 @@ public class World {
 	private final JTSQuadTreeAdapter<Shot> shots;
 	private final JTSQuadTreeAdapter<Wall> walls;
 
-	private final int maxTimeDynamicData;
+	private final double maxTimeDynamicData;
 
-	public World(int maxTimeDynamicData) {
+	public World(double maxTimeDynamicData) {
 		this.maxTimeDynamicData = maxTimeDynamicData;
 		cookies = new JTSQuadTreeAdapter<Cookie>();
 		mines = new JTSQuadTreeAdapter<Mine>();

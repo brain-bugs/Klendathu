@@ -20,7 +20,9 @@ import de.hbt.hackathon.rtb.base.message.output.NameMessage;
 import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
 import de.hbt.hackathon.rtb.strategy.HealingStrategy;
-import de.hbt.hackathon.rtb.strategy.SimpleStrategy;
+import de.hbt.hackathon.rtb.strategy.Importance;
+import de.hbt.hackathon.rtb.strategy.ImportanceCalculator;
+import de.hbt.hackathon.rtb.strategy.MultiStrategy;
 import de.hbt.hackathon.rtb.strategy.WalkAndTalkStrategy;
 import de.hbt.hackathon.rtb.world.World;
 
@@ -49,23 +51,44 @@ public class Agent implements CommunicationListener {
 	public static void main(String[] args) throws IOException {
 		Communicator communicator = new Communicator();
 
-		World world = new World(0.5);
-		AbstractStrategy strategy;
+		final World world = new World(0.5);
 
-		AbstractStrategy simpleStrategy = new SimpleStrategy(world);
-		AbstractStrategy healingStrategy = new HealingStrategy(world);
-		AbstractStrategy walkAndTalkStrategy = new WalkAndTalkStrategy(world);
+//		AbstractStrategy simpleStrategy = new SimpleStrategy(world);
+		AbstractStrategy healingStrategy = new HealingStrategy(world); // offensive strategie
+		AbstractStrategy walkAndTalkStrategy = new WalkAndTalkStrategy(world); // defensive strategy
 
-		if (args[0].equals(simpleStrategy.getName())) {
-			strategy = simpleStrategy;
-		} else if (args[0].equals(healingStrategy.getName())) {
-			strategy = healingStrategy;
-		} else if (args[0].equals(walkAndTalkStrategy.getName())) {
-			strategy = walkAndTalkStrategy;
-		} else {
-			LOGGER.error("No bot name is given!");
-			strategy = simpleStrategy;
-		}
+		MultiStrategy strategy = new MultiStrategy(walkAndTalkStrategy);
+		strategy.addStrategy(new ImportanceCalculator() {
+			
+			@Override
+			public Importance calculate() {
+				if(world.getMyRobot() != null && world.getMyRobot().getCurrentPosition() != null) {
+					if(world.getMyRobot().getEnergyLevel() < 2) {
+						return Importance.IMPORTANT;
+					}
+					if(world.getMyRobot().getEnergyLevel() < 6) {
+						return Importance.USEFUL;
+					}
+				}
+				return Importance.NOT_REALLY;
+			}
+		}, walkAndTalkStrategy);
+		strategy.addStrategy(new ImportanceCalculator() {
+			
+			@Override
+			public Importance calculate() {
+				if(world.getMyRobot() != null && world.getMyRobot().getCurrentPosition() != null) {
+					if(world.getShots().size() > 5) {
+						return Importance.IMPORTANT;
+					}
+					if(world.getShots().size() > 0) {
+						return Importance.USEFUL;
+					}
+				}
+				return Importance.NOT_REALLY;
+			}
+		}, healingStrategy);
+		
 		LOGGER.info("Strategy implementation: " + strategy.getClass().getSimpleName());
 
 		WorldUpdater worldUpdater = new WorldUpdater(world);

@@ -17,6 +17,7 @@ import de.hbt.hackathon.rtb.base.message.output.OutputMessage;
 import de.hbt.hackathon.rtb.base.message.output.RotateAmountMessage;
 import de.hbt.hackathon.rtb.base.message.output.RotateMessage;
 import de.hbt.hackathon.rtb.base.strategy.AbstractStrategy;
+import de.hbt.hackathon.rtb.base.type.Coordinate;
 import de.hbt.hackathon.rtb.world.Cookie;
 import de.hbt.hackathon.rtb.world.GameObject;
 import de.hbt.hackathon.rtb.world.Mine;
@@ -53,22 +54,30 @@ public class HealingStrategy extends AbstractStrategy {
 				messages.addAll(targeter.driveTo(myRobot, cookie.getCurrentPosition()));
 			}
 		}
+		Mine mineToAttack = null;
+		Robot robotToAttack = null;
 		if (!mines.isEmpty()) {
 			LOGGER.info("There are mines!");
 			if (myRobot != null) {
-				Mine mine = mines.iterator().next();
-				Targeter targeter = new Targeter();
-				messages.addAll(targeter.aimCannonToAndShoot(myRobot, mine.getCurrentPosition(), getCapabilities().getMaxCannonRotate(),
-						getCapabilities().getMinShotEnergy()));
+				mineToAttack = getClosestGameObject(mines.iterator(), myRobot.getCurrentPosition());
+				if (mineToAttack.getCurrentPosition().distance(myRobot.getCurrentPosition()) > 4) {
+					mineToAttack = null;
+				}
 			}
-		} else if (!robots.isEmpty()) {
-			LOGGER.info("There are robots!");
+		}
+		if (!robots.isEmpty()) {
 			if (myRobot != null) {
-				Robot robot = getNewestGameObject(robots.iterator());
-				Targeter targeter = new Targeter();
-				messages.addAll(targeter.aimCannonToAndShoot(myRobot, robot.getCurrentPosition(), getCapabilities().getMaxCannonRotate(),
-						getCapabilities().getMaxShotEnergy() / 3d));
+				robotToAttack = getNewestGameObject(robots.iterator());
 			}
+		}
+		if (robotToAttack != null) {
+			Targeter targeter = new Targeter();
+			messages.addAll(targeter.aimCannonToAndShoot(myRobot, robotToAttack.getCurrentPosition(), getCapabilities()
+					.getMaxCannonRotate(), getCapabilities().getMaxShotEnergy() / 3d));
+		} else if (mineToAttack != null) {
+			Targeter targeter = new Targeter();
+			messages.addAll(targeter.aimCannonToAndShoot(myRobot, mineToAttack.getCurrentPosition(),
+					getCapabilities().getMaxCannonRotate(), getCapabilities().getMinShotEnergy()));
 		} else {
 			RotateAmountMessage rm = new RotateAmountMessage(EnumSet.of(AngleType.ROBOT), 1.0, 1.0);
 			messages.add(rm);
@@ -91,6 +100,20 @@ public class HealingStrategy extends AbstractStrategy {
 			}
 		}
 		return newestGameObject;
+	}
+
+	private static <E extends GameObject> E getClosestGameObject(Iterator<E> iterator, Coordinate position) {
+		double closestDistance = Double.MAX_VALUE;
+		E closestGameObject = null;
+		while (iterator.hasNext()) {
+			E gameObject = iterator.next();
+			double distance = gameObject.getCurrentPosition().distance(position);
+			if (distance < closestDistance) {
+				closestGameObject = gameObject;
+				closestDistance = distance;
+			}
+		}
+		return closestGameObject;
 	}
 
 	@Override

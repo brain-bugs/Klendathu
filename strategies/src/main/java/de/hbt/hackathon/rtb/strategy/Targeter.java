@@ -3,6 +3,7 @@ package de.hbt.hackathon.rtb.strategy;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,9 @@ import de.hbt.hackathon.rtb.base.type.Coordinate;
 import de.hbt.hackathon.rtb.world.MyRobot;
 
 public class Targeter {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(Targeter.class);
+	private static final Random RANDOM = new Random(0L);
 
 	private Coordinate ownPosition;
 	private double ownAngle;
@@ -67,6 +70,7 @@ public class Targeter {
 		this.setOwnLocation(myRobot.getCurrentPosition(), AngleUtils.normalizeAngle(myRobot.getCannonAngle()));
 		double rotationAngle = AngleUtils.normalizeAngle(this.calculateAngleTowards(targetCoordinate));
 		double angleOffset = (Math.toDegrees(rotationAngle) < 180d) ? 2d : -2d;
+		double distance = targetCoordinate.distance(myRobot.getCurrentPosition());
 
 		LOGGER.info("angle to target: " + Math.toDegrees(rotationAngle));
 		LOGGER.debug("My position: " + myRobot.getCurrentPosition() + ", cannon angle: "
@@ -75,11 +79,25 @@ public class Targeter {
 		LOGGER.info("Target position: " + targetCoordinate);
 
 		if (Math.toDegrees(rotationAngle) < 5 || Math.toDegrees(rotationAngle) > 355) {
-			messages.add(new ShootMessage(shootEnergy));
-			LOGGER.info("Shooting with " + shootEnergy + " energy");
+			boolean doShoot = false;
+			if (distance < 2) {
+				doShoot = true;
+			} else if (distance < 4) {
+				doShoot = (RANDOM.nextInt(100) < 50);
+			} else if (distance < 6) {
+				doShoot = (RANDOM.nextInt(100) < 25);
+			} else {
+				doShoot = (RANDOM.nextInt(100) < 10);
+			}
+			if (doShoot) {
+				messages.add(new ShootMessage(shootEnergy));
+				LOGGER.info("Shooting with " + shootEnergy + " energy");
+			} else {
+				LOGGER.info("Don't shoot, too far away.");
+			}
 		}
 
-		RotateAmountMessage rm = new RotateAmountMessage(EnumSet.of(AngleType.CANNON), cannonRotateSpeed, angleOffset);
+		RotateAmountMessage rm = new RotateAmountMessage(EnumSet.of(AngleType.CANNON, AngleType.RADAR), cannonRotateSpeed, angleOffset);
 		LOGGER.info("Rotate cannon by " + angleOffset + " radians with speed " + cannonRotateSpeed);
 		messages.add(rm);
 

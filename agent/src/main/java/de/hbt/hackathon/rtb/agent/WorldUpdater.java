@@ -142,9 +142,6 @@ public class WorldUpdater implements CommunicationListener {
 			ObjectType objectType = radarMessage.getObjectType();
 			double radarDistance = radarMessage.getRadarDistance();
 
-			// if (infoMessage.getSpeed() > 0.5 && radarDistance > 4)
-			// return; // too long distances may lead to errornous results
-
 			double rotationAngle = myRobot.getRotationAngle();
 			double radarAngle = radarMessage.getRadarAngle() + rotationAngle;
 			double cannonAngle = infoMessage.getCannonAngle() + rotationAngle;

@@ -23,10 +23,7 @@ public class World {
 	private final JTSQuadTreeAdapter<Shot> shots;
 	private final JTSQuadTreeAdapter<Wall> walls;
 
-	private final double maxTimeDynamicData;
-
-	public World(double maxTimeDynamicData) {
-		this.maxTimeDynamicData = maxTimeDynamicData;
+	public World() {
 		cookies = new JTSQuadTreeAdapter<Cookie>();
 		mines = new JTSQuadTreeAdapter<Mine>();
 		robots = new JTSQuadTreeAdapter<Robot>();
@@ -116,16 +113,16 @@ public class World {
 	}
 
 	public void gc(double currentTime) {
-		gc(robots, currentTime);
-		gc(shots, currentTime);
-		gc(cookies, currentTime);
-		gc(mines, currentTime);
+		gc(robots, currentTime, 0.5);
+		gc(shots, currentTime, 0.5);
+		gc(cookies, currentTime, 10.0);
+		gc(mines, currentTime, 10.0);
 	}
 
-	private void gc(GeometricSet<? extends GameObject> objects, double currentTime) {
+	private void gc(GeometricSet<? extends GameObject> objects, double currentTime, double maxTimeData) {
 		for (Iterator<? extends GameObject> i = objects.iterator(); i.hasNext();) {
 			GameObject gameObject = i.next();
-			if (gameObject.getCurrentPosition().getTimeStamp() < (currentTime - maxTimeDynamicData)) {
+			if (gameObject.getCurrentPosition().getTimeStamp() < (currentTime - maxTimeData)) {
 				objects.remove(gameObject);
 			}
 		}

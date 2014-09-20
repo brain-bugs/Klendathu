@@ -49,7 +49,7 @@ public class Agent implements CommunicationListener {
 	public static void main(String[] args) throws IOException {
 		Communicator communicator = new Communicator();
 
-		World world = new World(0.5);
+		World world = new World();
 		AbstractStrategy strategy;
 
 		AbstractStrategy simpleStrategy = new SimpleStrategy(world);
